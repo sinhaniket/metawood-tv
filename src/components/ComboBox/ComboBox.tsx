@@ -1,9 +1,22 @@
 import React from 'react';
-import { DropdownProps, Menu, Input, Icon, Dropdown } from 'semantic-ui-react';
-import { debounce, getMediaPathResults, getYouTubeResults } from '../../utils';
+import {
+  DropdownProps,
+  Menu,
+  Input,
+  Icon,
+  Dropdown,
+  Grid,
+  Button,
+} from 'semantic-ui-react';
+import {
+  debounce,
+  getMediaPathResults,
+  getYouTubeResults,
+  getYouTubeTrendings,
+} from '../../utils';
 import { examples } from '../../utils/examples';
 import ChatVideoCard from '../Playlist/ChatVideoCard';
-
+import styles from './ComboBox.module.css';
 interface ComboBoxProps {
   setMedia: (e: any, data: DropdownProps) => void;
   playlistAdd: (e: any, data: DropdownProps) => void;
@@ -16,6 +29,7 @@ interface ComboBoxProps {
   streamPath: string | undefined;
   disabled?: boolean;
   playlist: PlaylistVideo[];
+  toggleIsUploadPress: Function;
 }
 
 export class ComboBox extends React.Component<ComboBoxProps> {
@@ -45,7 +59,8 @@ export class ComboBox extends React.Component<ComboBoxProps> {
           let timestamp = Number(new Date());
           let results: JSX.Element[] | undefined = undefined;
           if (query === '' || (query && query.startsWith('http'))) {
-            let items = examples;
+            // let items = examples;
+            let items = await getYouTubeTrendings();
             if (!this.state.inputMedia && this.props.mediaPath) {
               items = await getMediaPathResults(this.props.mediaPath, '');
             }
@@ -59,38 +74,79 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                 },
               ];
             }
-            results = items.map((result: SearchResult, index: number) => (
-              <Menu.Item
-                style={{ padding: '2px' }}
-                key={result.url}
-                onClick={(e: any) =>
-                  this.setMediaAndClose(e, { value: result.url })
-                }
-              >
-                <ChatVideoCard
-                  video={result}
-                  index={index}
-                  onPlaylistAdd={this.props.playlistAdd}
-                />
-              </Menu.Item>
-            ));
+            results =
+              items?.length > 0
+                ? items?.map((result: SearchResult, index: number) => (
+                    <Grid.Column
+                      key={result.url}
+                      onClick={(e: any) =>
+                        this.setMediaAndClose(e, { value: result.url })
+                      }
+                    >
+                      <ChatVideoCard
+                        video={result}
+                        index={index}
+                        onPlaylistAdd={this.props.playlistAdd}
+                        isYoutube
+                      />
+                    </Grid.Column>
+                  ))
+                : undefined;
+
+            // {/* ====================== OLD VIEW ====================== */}
+            // results = items.map((result: SearchResult, index: number) => (
+            //   <Menu.Item
+            //     style={{ padding: '2px' }}
+            //     key={result.url}
+            //     onClick={(e: any) =>
+            //       this.setMediaAndClose(e, { value: result.url })
+            //     }
+            //   >
+            //     <ChatVideoCard
+            //       video={result}
+            //       index={index}
+            //       onPlaylistAdd={this.props.playlistAdd}
+            //     />
+            //   </Menu.Item>
+            // ));
           } else {
             const data = await getYouTubeResults(query);
-            results = data.map((result, index) => (
-              <Menu.Item
-                key={result.url}
-                onClick={(e: any) =>
-                  this.setMediaAndClose(e, { value: result.url })
-                }
-              >
-                <ChatVideoCard
-                  video={result}
-                  index={index}
-                  onPlaylistAdd={this.props.playlistAdd}
-                  isYoutube
-                />
-              </Menu.Item>
-            ));
+            results =
+              data?.length > 0
+                ? data?.map((result: SearchResult, index: number) => (
+                    <Grid.Column
+                      key={result.url}
+                      onClick={(e: any) =>
+                        this.setMediaAndClose(e, { value: result.url })
+                      }
+                      stretched
+                    >
+                      <ChatVideoCard
+                        video={result}
+                        index={index}
+                        onPlaylistAdd={this.props.playlistAdd}
+                        isYoutube
+                      />
+                    </Grid.Column>
+                  ))
+                : undefined;
+
+            // {/* ====================== Old View ====================== */ }
+            // results = data.map((result, index) => (
+            //   <Menu.Item
+            //     key={result.url}
+            //     onClick={(e: any) =>
+            //       this.setMediaAndClose(e, { value: result.url })
+            //     }
+            //   >
+            //     <ChatVideoCard
+            //       video={result}
+            //       index={index}
+            //       onPlaylistAdd={this.props.playlistAdd}
+            //       isYoutube
+            //     />
+            //   </Menu.Item>
+            // ));
           }
           if (timestamp > this.state.lastResultTimestamp) {
             this.setState({
@@ -106,14 +162,14 @@ export class ComboBox extends React.Component<ComboBoxProps> {
   };
 
   render() {
-    const { currentMedia, getMediaDisplayName } = this.props;
+    const { currentMedia, getMediaDisplayName, toggleIsUploadPress } =
+      this.props;
     const { results } = this.state;
     return (
       <div style={{ position: 'relative' }}>
         <div style={{ display: 'flex', gap: '4px' }}>
           <Input
             style={{ flexGrow: 1 }}
-            inverted
             fluid
             focus
             disabled={this.props.disabled}
@@ -136,6 +192,8 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               );
               setTimeout(() => e.target.select(), 100);
             }}
+            inverted={true}
+            className={styles.SearchInput}
             onBlur={() => {
               setTimeout(
                 () =>
@@ -164,7 +222,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               />
             }
             loading={this.state.loading}
-            label={'Now Watching:'}
+            label={{ content: 'Now Watching:', className: styles.InputLabel }}
             placeholder="Enter video file URL, YouTube link, or YouTube search term"
             value={
               this.state.inputMedia !== undefined
@@ -172,24 +230,26 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                 : getMediaDisplayName(currentMedia)
             }
           />
+
+          {/* ======================  Showing the playlist ====================== */}
           <Dropdown
             icon="list"
             labeled
-            className="icon"
+            className={`${styles.PlaylistDropdown} icon`}
             button
             text={`Playlist (${this.props.playlist.length})`}
             scrolling
           >
-            <Dropdown.Menu direction="left">
+            <Dropdown.Menu direction="left" className={styles.PlaylistMenu}>
               {this.props.playlist.length === 0 && (
-                <Dropdown.Item disabled>
+                <Dropdown.Item disabled style={{ color: 'white' }}>
                   There are no items in the playlist.
                 </Dropdown.Item>
               )}
               {this.props.playlist.map((item: PlaylistVideo, index: number) => {
                 return (
-                  <Dropdown.Item>
-                    <div style={{ maxWidth: '500px' }}>
+                  <Dropdown.Item className={styles.PlaylistItem}>
+                    <div style={{ width: '100%' }}>
                       <ChatVideoCard
                         video={item}
                         index={index}
@@ -215,8 +275,24 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               })}
             </Dropdown.Menu>
           </Dropdown>
+          {/* ====================== END PLAYLIST ====================== */}
+
+          {/* ====================== Upload Button ====================== */}
+          <Button
+            icon
+            labelPosition="right"
+            size="tiny"
+            className={styles.UploadButton}
+            onClick={() => toggleIsUploadPress()}
+          >
+            Upload
+            <Icon size="large" name="arrow alternate circle down outline" />
+          </Button>
         </div>
-        {Boolean(results) && this.state.inputMedia !== undefined && (
+
+        {/* ====================== Search list result ====================== */}
+        {/* ====================== Old version ====================== */}
+        {/* {Boolean(results) && this.state.inputMedia !== undefined && (
           <Menu
             fluid
             vertical
@@ -230,7 +306,19 @@ export class ComboBox extends React.Component<ComboBoxProps> {
           >
             {results}
           </Menu>
+        )} */}
+
+        {/* ====================== new ui ====================== */}
+        {Boolean(results) && this.state.inputMedia !== undefined && (
+          <div className={styles.wrapper}>
+            <Grid className={styles['list-container']}>
+              <Grid.Row columns={2} padded>
+                {results}
+              </Grid.Row>
+            </Grid>
+          </div>
         )}
+        {/* ====================== Search list end ====================== */}
       </div>
     );
   }
