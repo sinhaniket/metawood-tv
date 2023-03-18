@@ -69,6 +69,7 @@ declare global {
       videoRefs: HTMLVideoElementDict;
       videoPCs: PCDict;
     };
+    setVolume: any
   }
 }
 
@@ -306,6 +307,7 @@ export default class App extends React.Component<AppProps, AppState> {
           onReady: () => {
             console.log('yt onReady');
             this.watchPartyYTPlayer = ytPlayer;
+            window.setVolume = (val: number) =>  this.setVolume(val);
             this.setState({ isYouTubeReady: true, loading: false });
             // We might have failed to play YT originally, ask for the current video again
             if (this.isYouTube()) {
