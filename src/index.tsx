@@ -18,6 +18,7 @@ import { Create } from './components/Create/Create';
 import 'semantic-ui-css/semantic.min.css';
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import PlaylistPage from './components/PlaylistPage/PlaylistPage';
 
 const Debug = lazy(() => import('./components/Debug/Debug'));
 
@@ -102,6 +103,13 @@ class WatchParty extends React.Component {
             exact
             render={() => {
               return <Create user={this.state.user} />;
+            }}
+          />
+          <Route
+            path="/playlist"
+            exact
+            render={() => {
+              return <PlaylistPage />;
             }}
           />
           <Route

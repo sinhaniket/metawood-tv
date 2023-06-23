@@ -1,0 +1,32 @@
+/* Add this code to your CSS file */
+.swiper-scrollbar {
+  background-color: #555555;
+  width: 300px !important;
+  overflow-x: auto;
+  transform: scale(2) translateX(70%);
+}
+
+.swiper-scrollbar-drag {
+  background-color: #fff;
+}
+.swiper-slide:hover {
+  cursor: default;
+}
+
+@media (min-width: 320px) {
+  .swiper-scrollbar {
+    width: 200px !important;
+    transform: scale(2) translateX(30%);
+  }
+}
+@media (min-width: 641px) {
+  .swiper-scrollbar {
+    transform: scale(2) translateX(40%);
+    width: 300px !important;
+  }
+}
+@media (min-width: 1025px) {
+  .swiper-scrollbar {
+    transform: scale(2) translateX(70%);
+  }
+}
