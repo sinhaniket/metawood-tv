@@ -17,7 +17,6 @@ import fullScreenIcon from '../../../src/assets/icons/full-screen.svg';
 import quiteFScreenIcon from '../../../src/assets/icons/quit-full-screen.svg';
 
 const PlaylistPage = () => {
-  const [isMobile, setIsMobile] = React.useState<boolean>(false);
   const [activeSlideIndex, setActiveSlideIndex] = React.useState(0);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(true);
 
@@ -33,18 +32,6 @@ const PlaylistPage = () => {
       setActiveSlideIndex(activeSlideIndex - 1);
     }
   };
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      const isMobileScreen = window.innerWidth <= 868; // Adjust the threshold as needed
-      setIsMobile(isMobileScreen);
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
   return (
     <div className="pl-[1%] md:pl-[2%] lg:pl-[3%] bg-[#1E1E1E] py-4 w-full relative h-screen">
       <div className="pr-[3%] flex justify-between">
