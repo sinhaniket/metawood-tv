@@ -9,8 +9,19 @@ import tgIcon from '../../assets/icons/telegram.svg';
 import uploadIcon from '../../assets/upload/upload.svg';
 import clipboardIcon from '../../assets/icons/clipboard-paste.svg';
 import searchIcon from '../../assets/icons/search.svg';
+import CoffeIcon from '../../assets/icons/coffee.svg';
 import { AppState } from '../App/App';
 import GetOpacity from '../../hook/getOpacity';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+// Import Swiper styles
+
+// import "swiper/css/pagination";
+// import required modules
+import { FreeMode, Navigation, Pagination } from 'swiper';
+import ReactPlayer from 'react-player';
+import MetaButton from '../../atoms/MetaButton';
+import fullScreenIcon from '../../../src/assets/icons/full-screen.svg';
+import quiteFScreenIcon from '../../../src/assets/icons/quit-full-screen.svg';
 export interface IEmptyTheatreProps {
   toggleIsUploadPress: Function;
   setMedia: (e: any, data: DropdownProps) => void;
@@ -43,9 +54,30 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
     setLoadingFalse,
     gotoYTScreen,
   } = props;
-
   const { opacity: op } = GetOpacity(!state.currentMediaPaused);
+  const [isFullScreen, setIsFullScreen] = React.useState<boolean>(true);
+  const [isMobile, setIsMobile] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    const handleResize = () => {
+      const isMobileScreen = window.innerWidth <= 868; // Adjust the threshold as needed
+      setIsMobile(isMobileScreen);
+    };
+
+    // Add event listener to handle window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial check on component mount
+    handleResize();
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const toggleFScreen = (): void => {
+    setIsFullScreen(!isFullScreen);
+  };
   React.useEffect(() => {
     // ((state as AppState).clipboard && (state as AppState).currentMedia) && setLoadingFalse();
     setLoadingFalse();
@@ -54,147 +86,14 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
 
   return (
     <main className={classes.content}>
-      <div className={classes.btn_area}>
-        {/* ====================== NOW PLAYING ====================== */}
-        {currentMedia && (
-          <div className="relative">
-            <button
-              onClick={() => toggleHome()}
-              className={`btn btn-md font-bold text-[14px] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80 rounded-xl border-none capitalize opacity-${
-                op * 100
-              }`}
-            >
-              <span>
-                <img src={playIcon} alt="" className="h-8 mr-1 opacity-70" />
-              </span>{' '}
-              Now Playing
-            </button>
-          </div>
-        )}
-
-        {/* ====================== PLAYLIST content ====================== */}
-        <div className="dropdown dropdown-end w-[250px]">
-          <label
-            tabIndex={1}
-            className="btn btn-md font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
-          >
-            <span>
-              <img src={playlistIcon} alt="" className="h-8 mr-2" />
-            </span>
-            Playlist ({props.playlist.length})
-          </label>
-
-          <div
-            tabIndex={1}
-            className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh] min-h-[10vh] overflow-y-auto ${
-              props.playlist.length > 0 && classes.playlist_content
-            }`}
-          >
-            <section className=" w-full ">
-              {props.playlist.map((item: PlaylistVideo, index: number) => {
-                return (
-                  <div
-                    key={index}
-                    // tabIndex={index}
-                    className={` card-compact w-full p-2 shadow bg-primary text-primary-content ${classes.PlaylistItem}`}
-                  >
-                    <div style={{ width: '100%', position: 'relative' }}>
-                      <ChatVideoCard
-                        toggleHome={props.toggleHome}
-                        video={item}
-                        index={index}
-                        controls
-                        fromHome
-                        onPlay={(index) => {
-                          props.setMedia(null, {
-                            value: props.playlist[index]?.url,
-                          });
-                          props.playlistDelete(index);
-                        }}
-                        onPlayNext={(index) => {
-                          props.playlistMove(index, 0);
-                        }}
-                        onRemove={(index) => {
-                          props.playlistDelete(index);
-                        }}
-                        disabled={props.disabled}
-                        isYoutube={Boolean(item.img)}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </section>
-
-            {props.playlist.length === 0 && (
-              <div
-                // style={{ color: 'white', fontSize: '1.2vw' }}
-                className="w-full  shadow bg-transparent text-primary-content"
-              >
-                <div className="">
-                  <h3 className=" text-center">Playlist Empty!</h3>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        {/* ====================== END PLAYLIST content ====================== */}
-
-        {/* ======================  OLD VERESION DROPDOWN ====================== */}
-        {/* <Dropdown
-          labeled
-          className={`${classes.PlaylistDropdown} icon`}
-          button
-          text={`Playlist (${props.playlist.length})`}
-          icon={"list layout"}
-          scrolling
-        >
-          <Dropdown.Menu direction="left" className={classes.PlaylistMenu}>
-            {props.playlist.length === 0 && (
-              <Dropdown.Item
-                disabled
-                style={{ color: 'white', fontSize: '1.2vw' }}
-              >
-                There are no items in the playlist.
-              </Dropdown.Item>
-            )}
-            {props.playlist.map((item: PlaylistVideo, index: number) => {
-              return (
-                <Dropdown.Item className={classes.PlaylistItem}>
-                  <div style={{ width: '100%' }}>
-                    <ChatVideoCard
-                      video={item}
-                      index={index}
-                      controls
-                      onPlay={(index) => {
-                        props.setMedia(null, {
-                          value: props.playlist[index]?.url,
-                        });
-                        props.playlistDelete(index);
-                      }}
-                      onPlayNext={(index) => {
-                        props.playlistMove(index, 0);
-                      }}
-                      onRemove={(index) => {
-                        props.playlistDelete(index);
-                      }}
-                      disabled={props.disabled}
-                      isYoutube={Boolean(item.img)}
-                    />
-                  </div>
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown> */}
-      </div>
-      <section className="flex flex-col w-[75%] h-screen items-center gap-1 justify-start mt-10 lg:mt-0 lg:justify-center">
+      <nav className={classes.tolbar}>
         <div className={classes.header}>
-          <img src="logo192.png" className="relative" width={120} alt="" />
+          <img src="logo192.png" className="relative h-16 lg:h-24" alt="" />
         </div>
+
         <div className={classes.inputContainer}>
           <span className="absolute left-3 top-3">
-            <img src={searchIcon} alt="s" className="h-6" />
+            <img src={searchIcon} alt="s" className="h-6 lg:h-12 lg:mt-2" />
             {/* <button className='btn bg-white/70 disabled hover:bg-white/70 border-none rounded-xl '></button> */}
           </span>
           <div>
@@ -206,12 +105,12 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                 }
               }}
               placeholder="Enter or paste your video URL"
-              className={`${classes.inputStyle} input w-full px-14 py-4 placeholder:text-[#49454F] rounded-xl text-gray border-none focus:outline-0 focus:border-none focus:ring-0`}
+              className={`${classes.inputStyle} input w-full px-14 py-4 lg:px-20 lg:py-10  placeholder:text-[#49454F] rounded-xl text-gray border-none focus:outline-0 focus:border-none focus:ring-0 lg:text-[28px]`}
             />
           </div>
           <span className="absolute right-0 top-0 cursor-pointer ">
             <button
-              className=" bg-white   m-1 p-2  active:bg-white/50 border-none rounded-xl"
+              className=" bg-white   m-1 p-2 lg:mt-2  active:bg-white/50 border-none rounded-xl"
               onClick={async () => {
                 // const permission = await navigator.permissions.query({ name:  });
                 navigator.clipboard
@@ -225,75 +124,241 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                   });
               }}
             >
-              <img src={clipboardIcon} alt="s" className="h-6" />
+              <img src={clipboardIcon} alt="s" className="h-6 lg:h-12 " />
             </button>
           </span>
         </div>
-        {/* <div className="flex justify-center gap-0">
-          <div className="relative">
-            <button
-              onClick={() => {}}
-              className="btn btn-md p-0 font-bold text-[14px] bg-transparent hover:bg-transparent rounded-xl border-none "
+      </nav>
+
+      {/* <div className={classes.btn_area}>
+				{currentMedia && (
+					<div className="relative">
+						<button
+							onClick={() => toggleHome()}
+							className={`btn btn-md font-bold text-[14px] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80 rounded-xl border-none capitalize opacity-${op * 100
+								}`}
+						>
+							<span>
+								<img src={playIcon} alt="" className="h-8 mr-1 opacity-70" />
+							</span>{' '}
+							Now Playing
+						</button>
+					</div>
+				)}
+
+				<div className="dropdown dropdown-end w-[250px]">
+					<label
+						tabIndex={1}
+						className="btn btn-md font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
+					>
+						<span>
+							<img src={playlistIcon} alt="" className="h-8 mr-2" />
+						</span>
+						Playlist ({props.playlist.length})
+					</label>
+
+					<div
+						tabIndex={1}
+						className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh] min-h-[10vh] overflow-y-auto ${props.playlist.length > 0 && classes.playlist_content
+							}`}
+					>
+						<section className=" w-full ">
+							{props.playlist.map((item: PlaylistVideo, index: number) => {
+								return (
+									<div
+										key={index}
+										// tabIndex={index}
+										className={` card-compact w-full p-2 shadow bg-primary text-primary-content ${classes.PlaylistItem}`}
+									>
+										<div style={{ width: '100%', position: 'relative' }}>
+											<ChatVideoCard
+												toggleHome={props.toggleHome}
+												video={item}
+												index={index}
+												controls
+												fromHome
+												onPlay={(index) => {
+													props.setMedia(null, {
+														value: props.playlist[index]?.url,
+													});
+													props.playlistDelete(index);
+												}}
+												onPlayNext={(index) => {
+													props.playlistMove(index, 0);
+												}}
+												onRemove={(index) => {
+													props.playlistDelete(index);
+												}}
+												disabled={props.disabled}
+												isYoutube={Boolean(item.img)}
+											/>
+										</div>
+									</div>
+								);
+							})}
+						</section>
+
+						{props.playlist.length === 0 && (
+							<div
+								className="w-full  shadow bg-transparent text-primary-content"
+							>
+								<div className="">
+									<h3 className=" text-center">Playlist Empty!</h3>
+								</div>
+							</div>
+						)}
+					</div>
+				</div>
+				
+			</div> */}
+
+      {/* swipper */}
+      <div className="w-4/5 h-full mt-10 lg:mt-20">
+        <Swiper
+          freeMode
+          spaceBetween={isMobile ? 20 : 45}
+          watchSlidesProgress={true}
+          slidesPerView={4.5}
+          className="mySwiper"
+        >
+          <SwiperSlide
+            className={`bg-gradient-to-r from-white to-[#ABABAB] ${
+              classes.btnBoxShadow
+            } ${
+              !currentMedia && 'opacity-70'
+            } btn border-0 capitalize   rounded-xl  relative`}
+          >
+            <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[38px]  text-[#49454f]">
+              <span>
+                <img src={playIcon} alt="" className="h-12 mr-1 opacity-70" />
+              </span>{' '}
+              Now Playing
+            </div>
+            <span
+              onClick={() => currentMedia && toggleHome()}
+              className="absolute left-0 top-0 h-full z-50 w-full"
+            ></span>
+            <div className="flex justify-center items-center h-2/3 lg:mt-6">
+              {currentMedia && !state.currentMediaPaused ? (
+                <ReactPlayer
+                  className="z-10 rounded-xl overflow-hidden"
+                  url={currentMedia}
+                  playing={false}
+                  controls={false}
+                  muted
+                  height="100%"
+                  width="80%"
+                  light
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center lg:text-[38px] mt-2 lg:leading-10 text-[#49454f] capitalize">
+                  <img src={CoffeIcon} alt="" className="lg:h-36 mb-1" />
+                  Coffee break {!isMobile && <br />} at the moment
+                </div>
+              )}
+            </div>
+          </SwiperSlide>
+          <SwiperSlide
+            className={`bg-gradient-to-r btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
+          >
+            <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[38px] text-[#49454f]">
+              <span>
+                <img src={playlistIcon} alt="" className="h-16 lg:h-28 mr-2" />
+              </span>
+              Playlist ({props.playlist.length})
+            </div>
+          </SwiperSlide>
+          <SwiperSlide
+            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center items-center btn border-0 hover:bg-[#d20001]`}
+          >
+            <div
+              onClick={() => {
+                gotoYTScreen();
+              }}
+              className="flex justify-center items-center rounded-xl h-full"
             >
-              <img src={yt} alt="" className="h-[65px] " />
-            </button>
-          </div>
-          <div className="relative ">
-            <button
+              <img className="mx-auto h-32 lg:h-52" src={yt} alt="" />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide
+            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center items-center rounded-xl h-full btn border-0 capitalize`}
+          >
+            <div
+              className="flex justify-center items-center rounded-xl h-full"
               onClick={() => toggleIsUploadPress()}
-              className="btn btn-md p-0 font-bold text-[14px] bg-transparent hover:bg-transparent rounded-xl border-none "
             >
-              <img src={upload} alt="" className="h-[70px]" />
-            </button>
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => {}}
-              className="btn btn-md p-0 font-bold text-[14px] bg-transparent hover:bg-transparent rounded-xl border-none "
-            >
-              <img src={telegram} alt="" className="h-[70px] w-full " />{' '}
-            </button>
-          </div>
-        </div> */}
-        <div className="grid relative w-full grid-cols-3 gap-3">
-          <button
-            onClick={() => {
-              gotoYTScreen();
-            }}
-            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl`}
+              <span className="text-white font-semibold text-[28px] lg:text-[48px]">
+                Upload
+              </span>
+              <img
+                className="pl-3 h-10 lg:h-20"
+                src={uploadIcon}
+                alt=" uploadIcon"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide
+            className={` bg-[#27a2dd] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center items-center rounded-xl btn border-0 capitalize`}
           >
-            <img className="mx-auto" src={yt} alt="" />
-          </button>
-          <button
-            onClick={() => toggleIsUploadPress()}
-            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
-          >
-            <span className="text-white font-semibold text-[18px]">Upload</span>
-            <img className="pl-3" src={uploadIcon} alt="uploadIcon" />
-          </button>
-          <button
-            onClick={() => {}}
-            className={`bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
-          >
-            <span className="text-white font-semibold text-[18px]">
-              Telegram
-            </span>
-            <img src={tgIcon} className="ml-1" alt="uploadIcon" />
-          </button>
-        </div>
-      </section>
-      <div className="mb-4 absolute bottom-1">
-        <p className="font-bold">
-          Psst! Did you know you can upload content from your computer and watch
-          in metawood? Click on the upload button above.
-        </p>
-        <p className="font-bold">
-          Alternatively, you can use the search link to look for YouTube URLs.
-        </p>
+            <div className="flex justify-center items-center rounded-xl h-full">
+              <span className="text-white font-semibold text-[28px] lg:text-[48px]">
+                Telegram
+              </span>
+              <img
+                src={tgIcon}
+                className="ml-3 h-15 lg:h-24"
+                alt="uploadIcon"
+              />
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide
+            className={`justify-center items-center rounded-xl hidden`}
+          ></SwiperSlide>
+          <SwiperSlide
+            className={`justify-center items-center rounded-xl hidden`}
+          ></SwiperSlide>
+        </Swiper>
       </div>
-      {/* <div className="absolute left-3 bottom-3">
-        <img className="cursor-pointer" src={solarQuit} alt="solarQuit" />
-      </div> */}
+
+      {/* <section className="flex flex-col w-[75%] h-screen items-center gap-1 justify-start mt-10 lg:mt-0 lg:justify-center">
+
+				<div className="grid relative w-full grid-cols-3 gap-3">
+					<button
+						onClick={() => {
+							gotoYTScreen();
+						}}
+						className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl`}
+					>
+						<img className="mx-auto" src={yt} alt="" />
+					</button>
+					<button
+						onClick={() => toggleIsUploadPress()}
+						className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
+					>
+						<span className="text-white font-semibold text-[18px]">Upload</span>
+						<img className="pl-3" src={uploadIcon} alt="uploadIcon" />
+					</button>
+					<button
+						onClick={() => { }}
+						className={`bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
+					>
+						<span className="text-white font-semibold text-[18px]">
+							Telegram
+						</span>
+						<img src={tgIcon} className="ml-1" alt="uploadIcon" />
+					</button>
+				</div>
+			</section> */}
+
+      <div className="absolute lg:bottom-10 bottom-5 lg:left-12 left-5">
+        <MetaButton
+          onClick={() => toggleFScreen()}
+          img={isFullScreen ? quiteFScreenIcon : fullScreenIcon}
+          className="bg-transparent"
+          imgClass="h-16 lg:h-24"
+        ></MetaButton>
+      </div>
     </main>
   );
 }

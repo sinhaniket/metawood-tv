@@ -16,7 +16,8 @@ import { serverPath } from './utils';
 import { Modal } from 'semantic-ui-react';
 import { Create } from './components/Create/Create';
 import 'semantic-ui-css/semantic.min.css';
-import { YtScreen } from './components/Modal/YtScreen';
+import 'swiper/css';
+import 'swiper/css/free-mode';
 
 const Debug = lazy(() => import('./components/Debug/Debug'));
 

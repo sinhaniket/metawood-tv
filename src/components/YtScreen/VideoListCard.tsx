@@ -4,7 +4,7 @@ import playIcon from '../../assets/icons/playIcon.svg';
 
 const VideoListCard = ({ item, playlistAdd, onSetMedia, toggleHome }: any) => {
   return (
-    <div className="bg-[#232323] py-2 px-3 rounded-lg min-w-[200px] overflow-hidden min-h-fit">
+    <div className="bg-[#232323] py-2 px-3 rounded-lg min-w-[200px] lg:min-w-[400px] overflow-hidden min-h-fit">
       <div className="flex space-y-3 flex-col">
         <div className="relative flex w-full overflow-x-hidden">
           <div className="w-full animate-marquee whitespace-nowrap">
@@ -12,7 +12,7 @@ const VideoListCard = ({ item, playlistAdd, onSetMedia, toggleHome }: any) => {
           </div>
         </div>
         <div className="relative">
-          <img src={item.img} alt="" width="100%" className="h-28" />
+          <img src={item.img} alt="" width="100%" className="h-24 lg:h-64" />
           <div
             onClick={() => {
               onSetMedia(null, { value: item.url });

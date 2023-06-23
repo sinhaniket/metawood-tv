@@ -49,6 +49,7 @@
     "srt-webvtt": "^2.0.0",
     "ssh-exec": "^2.0.0",
     "stripe": "^8.222.0",
+    "swiper": "^9.4.1",
     "url-exist": "^3.0.1",
     "uuid": "^8.3.2",
     "youtube-api": "^2.0.10"

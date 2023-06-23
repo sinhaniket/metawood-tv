@@ -83,14 +83,28 @@ input[type='range']::-moz-range-thumb {
   cursor: pointer;
 }
 
-/* input[type=range][value="0"]::-webkit-slider-thumb {
-  background: red;
+.swiper {
+  width: 150%;
+  height: 70%;
 }
 
-input[type=range][value="50"]::-webkit-slider-thumb {
-  background: orange;
-}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  /* background: #fff; */
 
-input[type=range][value="100"]::-webkit-slider-thumb {
-  background: green;
-} */
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.react-player__play-icon {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  .swiper {
+    width: 150%;
+    height: 60%;
+  }
+}

@@ -452,6 +452,7 @@ export default class App extends React.Component<AppProps, AppState> {
         clipboard: '',
       });
   };
+
   setPassword = (password: string | undefined) => {
     this.setState({ password });
   };
