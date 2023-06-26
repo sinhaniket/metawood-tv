@@ -12,12 +12,13 @@ import searchIcon from '../../assets/icons/search.svg';
 import CoffeIcon from '../../assets/icons/coffee.svg';
 import { AppState } from '../App/App';
 import GetOpacity from '../../hook/getOpacity';
+import arrowLeft from '../../assets/playlist/arrowLeft.svg';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 // Import Swiper styles
 
 // import "swiper/css/pagination";
 // import required modules
-import { FreeMode, Navigation, Pagination } from 'swiper';
+import SwiperCore, { FreeMode, Navigation, Pagination } from 'swiper';
 import ReactPlayer from 'react-player';
 import MetaButton from '../../atoms/MetaButton';
 import fullScreenIcon from '../../../src/assets/icons/full-screen.svg';
@@ -40,6 +41,7 @@ export interface IEmptyTheatreProps {
   setLoadingFalse: Function;
   state: AppState;
   gotoYTScreen: Function;
+  showPlaylist: Function;
 }
 
 export function EmptyTheatre(props: IEmptyTheatreProps) {
@@ -51,13 +53,27 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
     // setMedia,
     // playlistAdd,
     currentMedia,
+    showPlaylist,
     setLoadingFalse,
     gotoYTScreen,
   } = props;
-  const { opacity: op } = GetOpacity(!state.currentMediaPaused);
+  // const { opacity: op } = GetOpacity(!state.currentMediaPaused);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(true);
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
+  const [activeSlideIndex, setActiveSlideIndex] = React.useState(0);
 
+  const swiperRef = React.useRef<SwiperCore | null>(null);
+
+  const handleNextSlide = (type: string) => {
+    if (swiperRef.current && type === 'prev') {
+      swiperRef.current.slidePrev();
+      setActiveSlideIndex(activeSlideIndex - 1);
+    }
+    if (swiperRef.current && type === 'next') {
+      swiperRef.current.slideNext();
+      setActiveSlideIndex(activeSlideIndex + 1);
+    }
+  };
   React.useEffect(() => {
     const handleResize = () => {
       const isMobileScreen = window.innerWidth <= 868; // Adjust the threshold as needed
@@ -213,9 +229,23 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
 			</div> */}
 
       {/* swipper */}
+      <button
+        className="bg-inherit absolute z-30 top-[80%] translate-y-[-20%] left-[40%]"
+        onClick={() => handleNextSlide('prev')}
+      >
+        <img src={arrowLeft} alt="" className="h-16" />
+      </button>
+      <button
+        className="bg-inherit absolute z-30 top-[80%] translate-y-[-20%] left-[50%]"
+        onClick={() => handleNextSlide('next')}
+      >
+        <img src={arrowLeft} alt="" className="h-16 rotate-180" />
+      </button>
       <div className="w-4/5 h-full mt-10 lg:mt-20">
         <Swiper
           freeMode
+          onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           spaceBetween={isMobile ? 20 : 45}
           watchSlidesProgress={true}
           slidesPerView={4.5}
@@ -230,7 +260,11 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
           >
             <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[38px]  text-[#49454f]">
               <span>
-                <img src={playIcon} alt="" className="h-12 mr-1 opacity-70" />
+                <img
+                  src={playIcon}
+                  alt=""
+                  className="h-8 lg:h-12 mr-1 opacity-70"
+                />
               </span>{' '}
               Now Playing
             </div>
@@ -259,6 +293,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             </div>
           </SwiperSlide>
           <SwiperSlide
+            onClick={() => props.playlist.length && showPlaylist()}
             className={`bg-gradient-to-r btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
           >
             <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[38px] text-[#49454f]">

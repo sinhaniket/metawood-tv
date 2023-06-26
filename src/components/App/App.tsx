@@ -41,6 +41,7 @@ import ReactPlayer from 'react-player/lazy';
 import './App.css';
 // import YTReactPlayer from 'react-player/youtube';
 import { YtScreen } from '../Modal/YtScreen';
+import PlaylistPage from '../PlaylistPage/PlaylistPage';
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: any;
@@ -138,7 +139,7 @@ export interface AppState {
   isMute: boolean;
   volume: number;
   isShowTheatreTopbar: boolean;
-  screen: 'home' | 'youtube';
+  screen: 'home' | 'youtube' | 'playlist';
   isUntouched: boolean;
   lastInteraction: number;
   isHideOverlap: boolean;
@@ -1552,6 +1553,11 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState({ screen: 'youtube', isHome: true, isUploadPress: false });
   };
 
+  showPlaylist = () => {
+    console.log('showing playlist: ');
+    this.setState({ screen: 'playlist', isHome: true, isUploadPress: false });
+  };
+
   gotoHomeScreen = () => {
     this.setState({ screen: 'home', isHome: true, isUploadPress: false });
   };
@@ -1655,6 +1661,20 @@ export default class App extends React.Component<AppProps, AppState> {
                 disabled={!this.haveLock()}
                 playlist={this.state.playlist}
                 toggleHome={this.toggleHome}
+                showPlaylist={this.showPlaylist}
+              />
+            )}
+
+            {this.state.screen === 'playlist' && this.state.isHome && (
+              <PlaylistPage
+                setMedia={this.setMedia}
+                playlistDelete={this.playlistDelete}
+                playlistMove={this.playlistMove}
+                currentMedia={this.state.currentMedia}
+                currentMediaPaused={this.state.currentMediaPaused}
+                toggleHome={this.toggleHome}
+                gotoHomeScreen={this.gotoHomeScreen}
+                playlist={this.state.playlist}
               />
             )}
             <Grid.Row id="theaterContainer">
@@ -1682,6 +1702,7 @@ export default class App extends React.Component<AppProps, AppState> {
                       !this.state.isUntouched && (
                         <React.Fragment>
                           <ComboBox
+                            showPlaylist={this.showPlaylist}
                             isShowTheatreTopbar={this.state.isShowTheatreTopbar}
                             toggleShowTopbar={this.toggleShowTopbar}
                             isCollapsed={this.state.isCollapsed}
@@ -1768,6 +1789,7 @@ export default class App extends React.Component<AppProps, AppState> {
                             playlistMove={this.playlistMove}
                             currentMedia={this.state.currentMedia}
                             getMediaDisplayName={this.getMediaDisplayName}
+                            showPlaylist={this.showPlaylist}
                             launchMultiSelect={this.launchMultiSelect}
                             streamPath={this.props.streamPath}
                             mediaPath={this.state.mediaPath}

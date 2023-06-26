@@ -3,11 +3,14 @@
   background-color: #555555;
   width: 300px !important;
   overflow-x: auto;
-  transform: scale(2) translateX(70%);
+  display: none !important;
+  /* margin-top: 100px !important; */
+  transform: scale(2) translateX(0);
 }
 
 .swiper-scrollbar-drag {
   background-color: #fff;
+  width: 40px !important;
 }
 .swiper-slide:hover {
   cursor: default;
@@ -15,18 +18,23 @@
 
 @media (min-width: 320px) {
   .swiper-scrollbar {
-    width: 200px !important;
-    transform: scale(2) translateX(30%);
+    width: 400px !important;
+    /* transform: scale(2) translateX(30%); */
   }
 }
 @media (min-width: 641px) {
   .swiper-scrollbar {
-    transform: scale(2) translateX(40%);
-    width: 300px !important;
+    transform: scale(2) translateX(0);
+    width: 450px !important;
   }
 }
 @media (min-width: 1025px) {
   .swiper-scrollbar {
+    width: 600px !important;
     transform: scale(2) translateX(70%);
+  }
+  .swiper-scrollbar-drag {
+    background-color: #fff;
+    width: 50px !important;
   }
 }

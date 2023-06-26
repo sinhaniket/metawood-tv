@@ -24,7 +24,7 @@ import MetaButton from '../../atoms/MetaButton';
 import clipboardIcon from '../../assets/icons/clipboard-paste.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import BackIcon from '../../assets/icons/back.svg';
-import GetOpacity from '../../hook/getOpacity';
+// import GetOpacity from '../../hook/getOpacity';
 // import { log, timeLog } from 'console';
 interface SearchBoxProps {
   setMedia: (e: any, data: DropdownProps) => void;
@@ -49,6 +49,7 @@ interface SearchBoxProps {
   toggleShowTopbar: Function;
   gotoHomeScreen: Function;
   setVideoItems: Function;
+  showPlaylist: Function;
   currentMediaPaused: boolean;
 }
 interface ComboState {
@@ -250,6 +251,7 @@ export class SearchBox extends React.Component<SearchBoxProps> {
       this.setState({ opacity: 1, intervalId: undefined });
     }
   }
+
   render() {
     const { currentMedia, getMediaDisplayName, clipboard, toggleHome } =
       this.props;
@@ -363,6 +365,7 @@ export class SearchBox extends React.Component<SearchBoxProps> {
           {/* ====================== PLAYLIST content ====================== */}
           <div className="dropdown dropdown-end w-[220px]">
             <label
+              onClick={() => this.props.showPlaylist()}
               tabIndex={1}
               className="btn btn-md font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
             >
@@ -372,58 +375,57 @@ export class SearchBox extends React.Component<SearchBoxProps> {
               Playlist ({this.props.playlist.length})
             </label>
 
-            <div
-              tabIndex={1}
-              className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh]  min-h-[10vh] overflow-y-auto ${
-                this.props.playlist.length > 0 && styles.playlist_content
-              }`}
-            >
-              <section className=" w-full ">
-                {this.props.playlist.map(
-                  (item: PlaylistVideo, index: number) => {
-                    return (
-                      <div
-                        key={index}
-                        // tabIndex={index}
-                        className={` card-compact w-full p-2 shadow bg-primary text-primary-content  ${styles.PlaylistItem}`}
-                      >
-                        <div style={{ width: '100%', position: 'relative' }}>
-                          <ChatVideoCard
-                            video={item}
-                            index={index}
-                            controls
-                            onPlay={(index) => {
-                              this.props.setMedia(null, {
-                                value: this.props.playlist[index]?.url,
-                              });
-                              this.props.playlistDelete(index);
-                            }}
-                            onPlayNext={(index) => {
-                              this.props.playlistMove(index, 0);
-                            }}
-                            onRemove={(index) => {
-                              this.props.playlistDelete(index);
-                            }}
-                            isYoutube={Boolean(item.img)}
-                          />
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-              </section>
+            {/* <div
+							tabIndex={1}
+							className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh]  min-h-[10vh] overflow-y-auto ${this.props.playlist.length > 0 && styles.playlist_content
+								}`}
+						>
+							<section className=" w-full ">
+								{this.props.playlist.map(
+									(item: PlaylistVideo, index: number) => {
+										return (
+											<div
+												key={index}
+												// tabIndex={index}
+												className={` card-compact w-full p-2 shadow bg-primary text-primary-content  ${styles.PlaylistItem}`}
+											>
+												<div style={{ width: '100%', position: 'relative' }}>
+													<ChatVideoCard
+														video={item}
+														index={index}
+														controls
+														onPlay={(index) => {
+															this.props.setMedia(null, {
+																value: this.props.playlist[index]?.url,
+															});
+															this.props.playlistDelete(index);
+														}}
+														onPlayNext={(index) => {
+															this.props.playlistMove(index, 0);
+														}}
+														onRemove={(index) => {
+															this.props.playlistDelete(index);
+														}}
+														isYoutube={Boolean(item.img)}
+													/>
+												</div>
+											</div>
+										);
+									}
+								)}
+							</section>
 
-              {this.props.playlist.length === 0 && (
-                <div
-                  // style={{ color: 'white', fontSize: '1.2vw' }}
-                  className="w-full  shadow bg-transparent text-primary-content"
-                >
-                  <div className="">
-                    <h3 className=" text-center">Playlist Empty!</h3>
-                  </div>
-                </div>
-              )}
-            </div>
+							{this.props.playlist.length === 0 && (
+								<div
+									// style={{ color: 'white', fontSize: '1.2vw' }}
+									className="w-full  shadow bg-transparent text-primary-content"
+								>
+									<div className="">
+										<h3 className=" text-center">Playlist Empty!</h3>
+									</div>
+								</div>
+							)}
+						</div> */}
           </div>
           {/* ====================== END PLAYLIST content ====================== */}
         </div>

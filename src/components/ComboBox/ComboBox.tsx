@@ -46,6 +46,7 @@ interface ComboBoxProps {
   toggleCollapse: Function;
   isShowTheatreTopbar: boolean;
   toggleShowTopbar: Function;
+  showPlaylist: Function;
 }
 interface ComboState {
   inputMedia: string | undefined;
@@ -235,6 +236,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
       getMediaDisplayName,
       // toggleIsUploadPress,
       // isShowTheatreTopbar,
+      showPlaylist,
       clipboard,
       toggleHome,
       // toggleShowTopbar,
@@ -275,7 +277,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
             <MetaButton
               backShadow
               onClick={() => {
-                toggleHome();
+                toggleHome(null, 'home');
                 this.props.toggleCollapse();
               }}
               className="p-0 border-none"
@@ -368,6 +370,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
             {/* ====================== PLAYLIST content ====================== */}
             <div className="dropdown dropdown-end w-[280px]">
               <label
+                onClick={() => showPlaylist()}
                 tabIndex={1}
                 className="btn btn-lg font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
               >
@@ -377,59 +380,58 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                 Playlist ({this.props.playlist.length})
               </label>
 
-              <div
-                tabIndex={1}
-                className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh] min-h-[10vh] overflow-y-auto ${
-                  this.props.playlist.length > 0 && styles.playlist_content
-                }`}
-              >
-                <section className=" w-full ">
-                  {this.props.playlist.map(
-                    (item: PlaylistVideo, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          // tabIndex={index}
-                          className={` card-compact w-full p-2 shadow bg-primary text-primary-content ${styles.PlaylistItem}`}
-                        >
-                          <div style={{ width: '100%', position: 'relative' }}>
-                            <ChatVideoCard
-                              video={item}
-                              index={index}
-                              controls
-                              onPlay={(index) => {
-                                this.props.setMedia(null, {
-                                  value: this.props.playlist[index]?.url,
-                                });
-                                this.props.playlistDelete(index);
-                              }}
-                              onPlayNext={(index) => {
-                                this.props.playlistMove(index, 0);
-                              }}
-                              onRemove={(index) => {
-                                this.props.playlistDelete(index);
-                              }}
-                              disabled={this.props.disabled}
-                              isYoutube={Boolean(item.img)}
-                            />
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
-                </section>
+              {/* <div
+								tabIndex={1}
+								className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh] min-h-[10vh] overflow-y-auto ${this.props.playlist.length > 0 && styles.playlist_content
+									}`}
+							>
+								<section className=" w-full ">
+									{this.props.playlist.map(
+										(item: PlaylistVideo, index: number) => {
+											return (
+												<div
+													key={index}
+													// tabIndex={index}
+													className={` card-compact w-full p-2 shadow bg-primary text-primary-content ${styles.PlaylistItem}`}
+												>
+													<div style={{ width: '100%', position: 'relative' }}>
+														<ChatVideoCard
+															video={item}
+															index={index}
+															controls
+															onPlay={(index) => {
+																this.props.setMedia(null, {
+																	value: this.props.playlist[index]?.url,
+																});
+																this.props.playlistDelete(index);
+															}}
+															onPlayNext={(index) => {
+																this.props.playlistMove(index, 0);
+															}}
+															onRemove={(index) => {
+																this.props.playlistDelete(index);
+															}}
+															disabled={this.props.disabled}
+															isYoutube={Boolean(item.img)}
+														/>
+													</div>
+												</div>
+											);
+										}
+									)}
+								</section>
 
-                {this.props.playlist.length === 0 && (
-                  <div
-                    // style={{ color: 'white', fontSize: '1.2vw' }}
-                    className="w-full  shadow bg-transparent text-primary-content"
-                  >
-                    <div className="">
-                      <h3 className=" text-center">Playlist Empty!</h3>
-                    </div>
-                  </div>
-                )}
-              </div>
+								{this.props.playlist.length === 0 && (
+									<div
+										// style={{ color: 'white', fontSize: '1.2vw' }}
+										className="w-full  shadow bg-transparent text-primary-content"
+									>
+										<div className="">
+											<h3 className=" text-center">Playlist Empty!</h3>
+										</div>
+									</div>
+								)}
+							</div> */}
             </div>
             {/* ====================== END PLAYLIST content ====================== */}
 
