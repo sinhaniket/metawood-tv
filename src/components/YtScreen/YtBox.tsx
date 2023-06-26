@@ -214,6 +214,15 @@ const YtBox = (props: IYtBoxProps) => {
                                 className="cursor-pointer w-auto lg:w-[1.3vw] h-auto lg:h-[2vw] rotate-180"
                                 src={addPlaylistIcon}
                                 alt=""
+                                style={{
+                                  fill: '#FF0000', // Replace '#FF0000' with your default color
+                                }}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.fill = '#00FF00')
+                                } // Replace '#00FF00' with your hover color
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.fill = '#FF0000')
+                                } // Reset to the default color on mouse out
                               />
                             </button>
                           </div>

@@ -316,7 +316,7 @@ export default function UploadFile(props: IUploadFileProps) {
               <button
                 onClick={() => {
                   props.playlistAdd(null, { value: video });
-                  props.toggleHome();
+                  //   props.toggleHome();
                 }}
                 className={`${
                   Number(progress) === 100

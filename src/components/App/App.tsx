@@ -626,11 +626,8 @@ export default class App extends React.Component<AppProps, AppState> {
             return;
           }
           // Stop all players
-          // const leftVideo = document.getElementById(
-          //   'leftVideo'
-          // ) as HTMLMediaElement;
-          // leftVideo?.pause();
-          // this.watchPartyYTPlayer?.stopVideo();
+          this.doPause();
+          this.watchPartyYTPlayer?.stopVideo();
           if (this.isYouTube() && !this.watchPartyYTPlayer) {
             console.log(
               'YT player not ready, onReady callback will retry when it is'
