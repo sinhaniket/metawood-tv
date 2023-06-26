@@ -8,7 +8,7 @@ import trendingWhite from '../../assets/icons/trending-w.png';
 // import gamingR from '../../assets/icons/gaming-r.svg';
 import playIcon2 from '../../assets/icons/playIcon.svg';
 import addPlaylistIcon from '../../assets/icons/playlist-add.svg';
-import VideoListCard from './VideoListCard';
+// import VideoListCard from './VideoListCard';
 import classes from './YtBox.module.css';
 import { TabsType } from '../Modal/YtScreen';
 import ReactPlayer from 'react-player';
@@ -162,11 +162,6 @@ const YtBox = (props: IYtBoxProps) => {
                           </h4>
                         </div>
                         <div className="relative h-[80px]">
-                          {/* <img
-												className="w-full lg:h-full h-[132px]  min-w-[180px] lg:min-h-[140px] rounded-md"
-												src={item.img}
-												alt="thumbnail"
-											/> */}
                           <ReactPlayer
                             className="z-10 rounded-xl overflow-hidden"
                             url={item.url}
@@ -178,7 +173,7 @@ const YtBox = (props: IYtBoxProps) => {
                             light
                           />
                           <span
-                            // onClick={() => handlePlayClick(index)}
+                            onClick={() => handlePlayClick(item.url)}
                             className="absolute left-0 top-0 h-full z-50 w-full"
                           ></span>
                           <div

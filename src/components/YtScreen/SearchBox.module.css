@@ -11,8 +11,8 @@
   border-radius: 20px;
   max-height: 80vh;
   padding: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
   z-index: 900;
 }
 .InputLabel {
@@ -33,7 +33,7 @@
   margin: 20px 0px;
   padding: 0;
   position: relative;
-  width: 70%;
+  width: 60%;
 }
 .playlist_content {
   position: absolute;

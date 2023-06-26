@@ -1,29 +1,17 @@
 import React from 'react';
-import {
-  DropdownProps,
-  Menu,
-  Input,
-  Icon,
-  Dropdown,
-  Grid,
-  Button,
-} from 'semantic-ui-react';
-import {
-  debounce,
-  getMediaPathResults,
-  getYouTubeResults,
-  getYouTubeTrendings,
-} from '../../utils';
+import { DropdownProps } from 'semantic-ui-react';
+import { debounce, getMediaPathResults, getYouTubeResults } from '../../utils';
 
 import playIcon from '../../assets/icons/play.svg';
 import playlistIcon from '../../assets/icons/playlist.svg';
-// import { examples } from '../../utils/examples';
-import ChatVideoCard from '../Playlist/ChatVideoCard';
+import playIcon2 from '../../assets/icons/playIcon.svg';
+import addPlaylistIcon from '../../assets/icons/playlist-add.svg';
 import styles from './SearchBox.module.css';
 import MetaButton from '../../atoms/MetaButton';
 import clipboardIcon from '../../assets/icons/clipboard-paste.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import BackIcon from '../../assets/icons/back.svg';
+import ReactPlayer from 'react-player';
 // import GetOpacity from '../../hook/getOpacity';
 // import { log, timeLog } from 'console';
 interface SearchBoxProps {
@@ -95,13 +83,10 @@ export class SearchBox extends React.Component<SearchBoxProps> {
           const query: string = this.state.inputMedia || '';
           let timestamp = Number(new Date());
           let results: JSX.Element[] | undefined = undefined;
-          if (query === '' || (query && query.startsWith('http'))) {
-            // let items = examples;
-            let items = await getYouTubeTrendings();
+          if (query.startsWith('http')) {
+            let items: any = [];
             if (!this.state.inputMedia && this.props.mediaPath) {
               items = await getMediaPathResults(this.props.mediaPath, '');
-              // this.props.toggleHome();
-              // this.setState({ isHome: true });
             }
             if (query) {
               items = [
@@ -115,66 +100,177 @@ export class SearchBox extends React.Component<SearchBoxProps> {
             }
             results =
               items?.length > 0
-                ? items?.map((result: SearchResult, index: number) => (
-                    <Grid.Column
-                      key={result.url}
-                      onClick={(e: any) =>
-                        this.setMediaAndClose(e, { value: result.url })
-                      }
-                    >
-                      <ChatVideoCard
-                        video={result}
-                        index={index}
-                        onPlaylistAdd={this.props.playlistAdd}
-                        isYoutube={!!result?.img}
-                      />
-                    </Grid.Column>
+                ? items?.map((item: SearchResult, index: number) => (
+                    <div key={item.url} className="">
+                      <div className="p-4 w-[25vw] lg:w-[15vw] bg-[#333] rounded-lg">
+                        <div className="flex overflow-hidden space-y-2 flex-col">
+                          <div className="w-full animate-marquee whitespace-nowrap">
+                            <h4 className=" m-0 text-md font-bold text-white">
+                              {item.name}
+                            </h4>
+                          </div>
+                          <div className="relative h-[80px] lg:h-[160px] w-[100%]">
+                            <ReactPlayer
+                              className="z-10 rounded-xl overflow-hidden"
+                              url={item.url}
+                              playing={false}
+                              controls={false}
+                              muted
+                              height="100%"
+                              width="100%"
+                              light
+                            />
+                            <span
+                              // onClick={() => handlePlayClick(index)}
+                              className="absolute left-0 top-0 h-full z-50 w-full"
+                            ></span>
+                            <div
+                              onClick={() => {
+                                // handlePlayClick(item.url);
+                                this.setMediaAndClose(e, { value: item.url });
+                              }}
+                              className="absolute top-[50%] cursor-pointer left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                            >
+                              <img
+                                src={playIcon2}
+                                className="z-10"
+                                alt=""
+                                width="100%"
+                              />
+                            </div>
+                          </div>
+                          <div className="">
+                            <div className="flex space-x-2 justify-between">
+                              <button
+                                onClick={() => {
+                                  // handlePlayClick(item.url);
+                                  this.setMediaAndClose(e, { value: item.url });
+                                }}
+                                className="btn capitalize bg-white flex-1 text-black/80 hover:bg-white"
+                              >
+                                Play Now
+                              </button>
+                              <button
+                                onClick={() => {
+                                  this.props.playlistAdd(null, {
+                                    value: item.url,
+                                  });
+                                }}
+                                className="btn bg-white hover:bg-white"
+                              >
+                                <img
+                                  className="cursor-pointer rotate-180"
+                                  src={addPlaylistIcon}
+                                  alt=""
+                                />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ))
                 : undefined;
-
-            // {/* ====================== OLD VIEW ====================== */}
-            // results = items.map((result: SearchResult, index: number) => (
-            //   <Menu.Item
-            //     style={{ padding: '2px' }}
-            //     key={result.url}
-            //     onClick={(e: any) =>
-            //       this.setMediaAndClose(e, { value: result.url })
-            //     }
-            //   >
-            //     <ChatVideoCard
-            //       video={result}
-            //       index={index}
-            //       onPlaylistAdd={this.props.playlistAdd}
-            //     />
-            //   </Menu.Item>
-            // ));
-
-            // this.props.setVideoItems(items);
-          } else {
+          } else if (query !== '') {
             const data = await getYouTubeResults(query);
 
             // this.props.setVideoItems(data);
             results =
               data?.length > 0
-                ? data?.map((result: SearchResult, index: number) => (
-                    <Grid.Column
-                      key={result.url}
-                      onClick={(e: any) => {
-                        this.setMediaAndClose(e, { value: result.url });
-                      }}
-                      stretched
-                    >
-                      <ChatVideoCard
-                        video={result}
-                        index={index}
-                        onPlaylistAdd={this.props.playlistAdd}
-                        isYoutube
-                      />
-                    </Grid.Column>
+                ? data?.map((item: SearchResult, index: number) => (
+                    <>
+                      <div key={item.url} className="">
+                        <div className="p-4 w-[25vw] lg:w-[15vw] bg-[#333] rounded-lg">
+                          <div className="flex overflow-hidden space-y-2 flex-col">
+                            <div className="w-full animate-marquee whitespace-nowrap">
+                              <h4 className=" m-0 text-md font-bold text-white">
+                                {item.name}
+                              </h4>
+                            </div>
+                            <div className="relative h-[80px] lg:h-[160px] w-[100%]">
+                              <ReactPlayer
+                                className="z-10 rounded-xl overflow-hidden"
+                                url={item.url}
+                                playing={false}
+                                controls={false}
+                                muted
+                                height="100%"
+                                width="100%"
+                                light
+                              />
+                              <span
+                                onClick={() => {
+                                  this.setMediaAndClose(e, { value: item.url });
+                                  this.props.toggleHome();
+                                }}
+                                className="absolute left-0 top-0 h-full z-50 w-full"
+                              ></span>
+                              <div
+                                onClick={() => {
+                                  // handlePlayClick(item.url);
+                                  this.setMediaAndClose(e, { value: item.url });
+                                }}
+                                className="absolute top-[50%] cursor-pointer left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                              >
+                                <img
+                                  src={playIcon2}
+                                  className="z-10"
+                                  alt=""
+                                  width="100%"
+                                />
+                              </div>
+                            </div>
+                            <div className="">
+                              <div className="flex space-x-2 justify-between">
+                                <button
+                                  onClick={() => {
+                                    // handlePlayClick(item.url);
+                                    this.setMediaAndClose(e, {
+                                      value: item.url,
+                                    });
+                                  }}
+                                  className="btn capitalize bg-white hover:bg-white flex-1 text-black/80 "
+                                >
+                                  Play Now
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    this.props.playlistAdd(null, {
+                                      value: item.url,
+                                    });
+                                  }}
+                                  className="btn bg-white hover:bg-white"
+                                >
+                                  <img
+                                    className="cursor-pointer rotate-180"
+                                    src={addPlaylistIcon}
+                                    alt=""
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <Grid.Column
+										key={result.url}
+										onClick={(e: any) => {
+											this.setMediaAndClose(e, { value: result.url });
+										}}
+										stretched
+									>
+										<ChatVideoCard
+											video={result}
+											index={index}
+											onPlaylistAdd={this.props.playlistAdd}
+											isYoutube
+										/>
+									</Grid.Column> */}
+                    </>
                   ))
                 : undefined;
           }
-          console.log({ results });
+
           if (timestamp > this.state.lastResultTimestamp) {
             this.setState({
               loading: false,
@@ -277,7 +373,7 @@ export class SearchBox extends React.Component<SearchBoxProps> {
             imgClass="rounded-full h-16"
           ></MetaButton>
 
-          <div className={styles.inputContainer}>
+          <div className={`${styles.inputContainer} flex-1`}>
             <span className="absolute left-3 top-3">
               <img src={searchIcon} alt="s" className="h-6" />
             </span>
@@ -308,16 +404,16 @@ export class SearchBox extends React.Component<SearchBoxProps> {
                   setTimeout(() => e.target.select(), 100);
                 }}
                 type="search"
-                onBlur={() => {
-                  setTimeout(
-                    () =>
-                      this.setState({
-                        inputMedia: undefined,
-                        results: undefined,
-                      }),
-                    200
-                  );
-                }}
+                // onBlur={() => {
+                // 	setTimeout(
+                // 		() =>
+                // 			this.setState({
+                // 				inputMedia: undefined,
+                // 				results: undefined,
+                // 			}),
+                // 		200
+                // 	);
+                // }}
                 // onKeyPress={(e: any) => {
                 //     if (e.key === 'Enter') {
                 //         this.setMediaAndClose(e, {
@@ -331,7 +427,7 @@ export class SearchBox extends React.Component<SearchBoxProps> {
                     ? this.state.inputMedia
                     : clipboard
                     ? clipboard
-                    : getMediaDisplayName(currentMedia)
+                    : ''
                 }
                 placeholder="Enter or paste your video URL"
                 className="input w-full px-14 py-6 text-lg rounded-xl text-gray bg-white/90 border-none focus:outline-0 focus:border-none focus:ring-0"
@@ -351,95 +447,42 @@ export class SearchBox extends React.Component<SearchBoxProps> {
             <div className="relative">
               <button
                 onClick={() => toggleHome()}
-                className={`btn btn-md font-bold text-[14px] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80 rounded-xl border-none capitalize opacity-${
+                className={`btn btn-md font-bold text-[14px] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80  rounded-xl border-none capitalize opacity-${
                   this.state.opacity * 100
                 }`}
               >
-                <span>
+                <span className="flex justify-between items-center">
                   <img src={playIcon} alt="" className="h-8 mr-1 opacity-70" />
+                  Now Playing
                 </span>{' '}
-                Now Playing
               </button>
             </div>
           )}
           {/* ====================== PLAYLIST content ====================== */}
-          <div className="dropdown dropdown-end w-[220px]">
-            <label
+
+          {this.props.playlist.length > 0 && (
+            <button
               onClick={() => this.props.showPlaylist()}
-              tabIndex={1}
-              className="btn btn-md font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
+              className="btn btn-md font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize max-w-[12%] flex flex-row gap-2"
             >
-              <span>
-                <img src={playlistIcon} alt="" className="h-8 mr-2" />
-              </span>
-              Playlist ({this.props.playlist.length})
-            </label>
+              <img src={playlistIcon} alt="" className="h-12 mr-2" />
+              {this.props.playlist.length}
+            </button>
+          )}
 
-            {/* <div
-							tabIndex={1}
-							className={`dropdown-content w-[50vw] bg-[#3A3A3A] p-2 rounded-md max-h-[98vh]  min-h-[10vh] overflow-y-auto ${this.props.playlist.length > 0 && styles.playlist_content
-								}`}
-						>
-							<section className=" w-full ">
-								{this.props.playlist.map(
-									(item: PlaylistVideo, index: number) => {
-										return (
-											<div
-												key={index}
-												// tabIndex={index}
-												className={` card-compact w-full p-2 shadow bg-primary text-primary-content  ${styles.PlaylistItem}`}
-											>
-												<div style={{ width: '100%', position: 'relative' }}>
-													<ChatVideoCard
-														video={item}
-														index={index}
-														controls
-														onPlay={(index) => {
-															this.props.setMedia(null, {
-																value: this.props.playlist[index]?.url,
-															});
-															this.props.playlistDelete(index);
-														}}
-														onPlayNext={(index) => {
-															this.props.playlistMove(index, 0);
-														}}
-														onRemove={(index) => {
-															this.props.playlistDelete(index);
-														}}
-														isYoutube={Boolean(item.img)}
-													/>
-												</div>
-											</div>
-										);
-									}
-								)}
-							</section>
-
-							{this.props.playlist.length === 0 && (
-								<div
-									// style={{ color: 'white', fontSize: '1.2vw' }}
-									className="w-full  shadow bg-transparent text-primary-content"
-								>
-									<div className="">
-										<h3 className=" text-center">Playlist Empty!</h3>
-									</div>
-								</div>
-							)}
-						</div> */}
-          </div>
           {/* ====================== END PLAYLIST content ====================== */}
         </div>
 
         {/* ====================== SEARCH CONTAINER END====================== */}
 
         {/* ====================== Search list result ====================== */}
-        {Boolean(results) && this.state.inputMedia !== undefined && (
+        {Boolean(results) && (
           <div className={styles.wrapper}>
-            <Grid className={styles['list-container']}>
-              <Grid.Row columns={2} padded>
-                {results}
-              </Grid.Row>
-            </Grid>
+            <div
+              className={`bg-[#3A3A3A] rounded-lg ${styles['list-container']} space-x-3 flex overflow-x-scroll whitespace-nowrap -mt-2  p-2`}
+            >
+              {results}
+            </div>
           </div>
         )}
         {/* ====================== Search list end ====================== */}
