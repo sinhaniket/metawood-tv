@@ -371,14 +371,14 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
 						onClick={() => toggleIsUploadPress()}
 						className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
 					>
-						<span className="text-white font-semibold text-[18px]">Upload</span>
+						<span className="text-white font-semibold text-[18px] lg:text-[1vw]">Upload</span>
 						<img className="pl-3" src={uploadIcon} alt="uploadIcon" />
 					</button>
 					<button
 						onClick={() => { }}
 						className={`bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center items-center rounded-xl`}
 					>
-						<span className="text-white font-semibold text-[18px]">
+						<span className="text-white font-semibold text-[18px] lg:text-[1vw]">
 							Telegram
 						</span>
 						<img src={tgIcon} className="ml-1" alt="uploadIcon" />

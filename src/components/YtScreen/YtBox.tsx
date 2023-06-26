@@ -8,7 +8,7 @@ import trendingWhite from '../../assets/icons/trending-w.png';
 // import gamingR from '../../assets/icons/gaming-r.svg';
 import playIcon2 from '../../assets/icons/playIcon.svg';
 import addPlaylistIcon from '../../assets/icons/playlist-add.svg';
-import VideoListCard from './VideoListCard';
+// import VideoListCard from './VideoListCard';
 import classes from './YtBox.module.css';
 import { TabsType } from '../Modal/YtScreen';
 import ReactPlayer from 'react-player';
@@ -33,7 +33,7 @@ const YtBox = (props: IYtBoxProps) => {
     [setMedia, toggleHome]
   );
   return (
-    <div className="bg-[#1E1E1E] m-0 p-0 w-full h-screen relative pl-[3%]">
+    <div className="bg-[#1E1E1E] m-0 p-0 w-full h-screen relative pl-[3%] lg:pl-[3vw]">
       <main className="mt-0">
         <div className="flex flex-col  justify-end lg:justify-center pb-[1rem]">
           <div className="flex space-x-6">
@@ -44,25 +44,25 @@ const YtBox = (props: IYtBoxProps) => {
                 onClick={() => setTab('trending')}
                 className={` ${
                   tab === 'trending'
-                    ? `bg-[#DC0606] py-2 ${classes.boxShadowCustom}`
+                    ? `bg-[#DC0606] py-2 lg:py-[0.3vw] ${classes.boxShadowCustom}`
                     : `py-3 bg-[#fff]`
                 } rounded-lg px-6 flex space-x-2 duration-500 justify-center items-center`}
               >
                 <img
                   src={tab === 'trending' ? trendingWhite : trendingRed}
                   alt=""
-                  className="h-8"
+                  className="h-8 lg:h-[1.5vw]"
                 />
                 <span
                   className={`${
                     tab === 'trending' ? 'text-white' : 'text-[#DC0606]'
-                  } text-[18px] font-bold`}
+                  } text-[18px] lg:text-[1vw] font-bold`}
                 >
                   Trending On Youtube
                 </span>
               </button>
               {tab === 'trending' && (
-                <div className="absolute top-[100%] w-full left-0 h-[5px] duration-500 rounded-lg mt-3 bg-[#3a3a3a]"></div>
+                <div className="absolute top-[100%] w-full left-0 h-[5px] lg:h-[0.3vw] duration-500 rounded-lg mt-3 lg:mt-[0.5vw] bg-[#3a3a3a]"></div>
               )}
             </div>
             {/* <div
@@ -84,13 +84,13 @@ const YtBox = (props: IYtBoxProps) => {
                 <span
                   className={`${
                     tab === 'live' ? 'text-white' : 'text-[#DC0606]'
-                  } text-[18px] font-bold`}
+                  } text-[18px] lg:text-[1vw] font-bold`}
                 >
                   Live
                 </span>
               </button>
               {tab === 'live' && (
-                <div className="absolute top-[100%] w-full left-0 h-[5px] duration-500 rounded-lg mt-3 bg-[#3a3a3a]"></div>
+                <div className="absolute top-[100%] w-full left-0 h-[5px] lg:h-[0.3vw] duration-500 rounded-lg mt-3 lg:mt-[0.5vw] bg-[#3a3a3a]"></div>
               )}
             </div>
             <div
@@ -112,13 +112,13 @@ const YtBox = (props: IYtBoxProps) => {
                 <span
                   className={`${
                     tab === 'movie' ? 'text-white' : 'text-[#DC0606]'
-                  } text-[18px] font-bold`}
+                  } text-[18px] lg:text-[1vw] font-bold`}
                 >
                   Movie
                 </span>
               </button>
               {tab === 'movie' && (
-                <div className="absolute top-[100%] w-full left-0 h-[5px] duration-500 rounded-lg mt-3 bg-[#3a3a3a]"></div>
+                <div className="absolute top-[100%] w-full left-0 h-[5px] lg:h-[0.3vw] duration-500 rounded-lg mt-3 lg:mt-[0.5vw] bg-[#3a3a3a]"></div>
               )}
             </div>
             <div
@@ -136,28 +136,28 @@ const YtBox = (props: IYtBoxProps) => {
                 <span
                   className={`${
                     tab === 'game' ? 'text-white' : 'text-[#DC0606]'
-                  } text-[18px] font-bold`}
+                  } text-[18px] lg:text-[1vw] font-bold`}
                 >
                   Game
                 </span>
               </button>
               {tab === 'game' && (
-                <div className="absolute top-[100%] w-full left-0 h-[5px] duration-500 rounded-lg mt-3 bg-[#3a3a3a]"></div>
+                <div className="absolute top-[100%] w-full left-0 h-[5px] lg:h-[0.3vw] duration-500 rounded-lg mt-3 lg:mt-[0.5vw] bg-[#3a3a3a]"></div>
               )}
             </div> */}
           </div>
 
           <div
-            className={`bg-[#3A3A3A] rounded-lg ${classes.scrollbarContainer} space-x-3 flex overflow-x-scroll scrollable-content whitespace-nowrap mt-6 p-2`}
+            className={`bg-[#3A3A3A] rounded-lg ${classes.scrollbarContainer} space-x-3 flex overflow-x-scroll scrollable-content whitespace-nowrap lg:mt-[4vw] mt-6 p-2`}
           >
             {props.videoItems?.length > 0 ? (
               props.videoItems?.map((item: SearchResult, key) => {
                 return (
                   <div key={item.url} className="w-[30%] min-w-[30%]">
-                    <div className="p-4  bg-[#333] rounded-lg">
+                    <div className="p-4 lg:p-[0.75vw]  bg-[#333] rounded-lg">
                       <div className="flex overflow-hidden space-y-2 flex-col">
                         <div className="w-full animate-marquee whitespace-nowrap">
-                          <h4 className=" m-0 text-md font-bold text-white">
+                          <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
                             {item.name}
                           </h4>
                         </div>
@@ -178,7 +178,7 @@ const YtBox = (props: IYtBoxProps) => {
                             light
                           />
                           <span
-                            // onClick={() => handlePlayClick(index)}
+                            onClick={() => handlePlayClick(item.url)}
                             className="absolute left-0 top-0 h-full z-50 w-full"
                           ></span>
                           <div
@@ -189,9 +189,8 @@ const YtBox = (props: IYtBoxProps) => {
                           >
                             <img
                               src={playIcon2}
-                              className="z-10"
+                              className="z-10 w-full lg:w-[2vw]"
                               alt=""
-                              width="100%"
                             />
                           </div>
                         </div>
@@ -201,7 +200,7 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 handlePlayClick(item.url);
                               }}
-                              className="btn capitalize bg-white hover:text-[#fff] flex-1 text-black/80 "
+                              className="btn capitalize bg-white hover:text-[#fff] h-auto lg:h-[2.1vw] flex-1 text-sm lg:text-[0.7vw] text-black/80 "
                             >
                               Play Now
                             </button>
@@ -209,21 +208,12 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 playlistAdd(null, { value: item.url });
                               }}
-                              className="btn bg-white"
+                              className="btn h-full bg-white"
                             >
                               <img
-                                className="cursor-pointer rotate-180"
+                                className="cursor-pointer w-auto lg:w-[1.3vw] h-auto lg:h-[2vw] rotate-180"
                                 src={addPlaylistIcon}
                                 alt=""
-                                style={{
-                                  fill: '#FF0000', // Replace '#FF0000' with your default color
-                                }}
-                                onMouseOver={(e) =>
-                                  (e.currentTarget.style.fill = '#00FF00')
-                                } // Replace '#00FF00' with your hover color
-                                onMouseOut={(e) =>
-                                  (e.currentTarget.style.fill = '#FF0000')
-                                } // Reset to the default color on mouse out
                               />
                             </button>
                           </div>

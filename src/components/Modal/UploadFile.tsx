@@ -194,7 +194,7 @@ export default function UploadFile(props: IUploadFileProps) {
                   accept="video/*"
                   type="file"
                 />
-                <span className="text-white font-semibold text-[18px]">
+                <span className="text-white font-semibold text-[18px] lg:text-[1vw]">
                   Upload
                 </span>
                 <img className="pl-3" src={uploadIcon} alt="uploadIcon" />
@@ -312,7 +312,7 @@ export default function UploadFile(props: IUploadFileProps) {
               <div>{loadingFileSize ? loadingFileSize : '0MB'}</div>
               <div>{fileSize ? fileSize : '0MB'}</div>
             </div>
-            <div className="grid my-4 grid-cols-2 gap-4">
+            <div className="grid my-4 grid-cols-2 gap-4 lg:p-[0.75vw]">
               <button
                 onClick={() => {
                   props.playlistAdd(null, { value: video });
@@ -322,7 +322,7 @@ export default function UploadFile(props: IUploadFileProps) {
                   Number(progress) === 100
                     ? 'text-[#212121] bg-[#FFF]'
                     : 'text-[#212121] btn-disabled bg-[#A9A9A9]'
-                } text-[18px] rounded-xl py-4 font-semibold`}
+                } text-[18px] lg:text-[1vw] rounded-xl py-4 font-semibold`}
               >
                 Add To playlist
               </button>
@@ -336,7 +336,7 @@ export default function UploadFile(props: IUploadFileProps) {
                   Number(progress) === 100
                     ? `${classes.linearBackground} text-[#fff] `
                     : 'text-[#AAAAAA] btn-disabled bg-[#5F5F5F]'
-                } text-[18px] rounded-xl py-4 font-semibold`}
+                } text-[18px] lg:text-[1vw] rounded-xl py-4 font-semibold`}
               >
                 Play now
               </button>

@@ -82,7 +82,7 @@ const PlaylistPage = (props: PropsType) => {
     [playlistDelete]
   );
   return (
-    <div className="pl-[1%] md:pl-[2%] lg:pl-[3%]  bg-[#1E1E1E] py-4 w-full relative h-screen overflow-hidden">
+    <div className="pl-[1%] md:pl-[2%] lg:pl-[3%] lg:pl-[3vw]  bg-[#1E1E1E] py-4 w-full relative h-screen overflow-hidden">
       <div className="pl-[8%] md:pl-[5%]">
         <div className="pr-[3%] flex justify-between">
           <MetaButton
@@ -90,7 +90,7 @@ const PlaylistPage = (props: PropsType) => {
             onClick={() => gotoHomeScreen()}
             className="p-0 border-none"
             img={BackIcon}
-            imgClass="rounded-full h-16"
+            imgClass="rounded-full h-16 lg:h-[3vw]"
           ></MetaButton>
           {currentMedia && (
             <div className="relative">
@@ -148,10 +148,10 @@ const PlaylistPage = (props: PropsType) => {
           >
             {playlist.map((item: PlaylistVideo, index) => (
               <SwiperSlide>
-                <div className="p-4 bg-[#333] rounded-lg">
+                <div className="p-4 lg:p-[0.75vw] bg-[#333] rounded-lg">
                   <div className="flex overflow-hidden space-y-2 flex-col">
                     <div className="w-full animate-marquee whitespace-nowrap">
-                      <h4 className=" m-0 text-md font-bold text-white">
+                      <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
                         {item.name}
                       </h4>
                     </div>

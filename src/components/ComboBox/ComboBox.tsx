@@ -24,6 +24,9 @@ import MetaButton from '../../atoms/MetaButton';
 import clipboardIcon from '../../assets/icons/clipboard-paste.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import BackIcon from '../../assets/icons/back.svg';
+import ReactPlayer from 'react-player';
+import playIcon2 from '../../assets/icons/playIcon.svg';
+import addPlaylistIcon from '../../assets/icons/playlist-add.svg';
 // import { log, timeLog } from 'console';
 interface ComboBoxProps {
   setMedia: (e: any, data: DropdownProps) => void;
@@ -125,13 +128,10 @@ export class ComboBox extends React.Component<ComboBoxProps> {
           const query: string = this.state.inputMedia || '';
           let timestamp = Number(new Date());
           let results: JSX.Element[] | undefined = undefined;
-          if (query === '' || (query && query.startsWith('http'))) {
-            // let items = examples;
-            let items = await getYouTubeTrendings();
+          if (query.startsWith('http')) {
+            let items: any = [];
             if (!this.state.inputMedia && this.props.mediaPath) {
               items = await getMediaPathResults(this.props.mediaPath, '');
-              // this.props.toggleHome();
-              // this.setState({ isHome: true });
             }
             if (query) {
               items = [
@@ -145,78 +145,177 @@ export class ComboBox extends React.Component<ComboBoxProps> {
             }
             results =
               items?.length > 0
-                ? items?.map((result: SearchResult, index: number) => (
-                    <Grid.Column
-                      key={result.url}
-                      onClick={(e: any) =>
-                        this.setMediaAndClose(e, { value: result.url })
-                      }
-                    >
-                      <ChatVideoCard
-                        video={result}
-                        index={index}
-                        onPlaylistAdd={this.props.playlistAdd}
-                        isYoutube={!!result?.img}
-                      />
-                    </Grid.Column>
+                ? items?.map((item: SearchResult, index: number) => (
+                    <div key={item.url} className="">
+                      <div className="p-4 lg:p-[0.75vw] w-[25vw] lg:w-[15vw] bg-[#333] rounded-lg">
+                        <div className="flex overflow-hidden space-y-2 flex-col">
+                          <div className="w-full animate-marquee whitespace-nowrap">
+                            <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
+                              {item.name}
+                            </h4>
+                          </div>
+                          <div className="relative h-[80px] lg:h-[160px] w-[100%]">
+                            <ReactPlayer
+                              className="z-10 rounded-xl overflow-hidden"
+                              url={item.url}
+                              playing={false}
+                              controls={false}
+                              muted
+                              height="100%"
+                              width="100%"
+                              light
+                            />
+                            <span
+                              // onClick={() => handlePlayClick(index)}
+                              className="absolute left-0 top-0 h-full z-50 w-full"
+                            ></span>
+                            <div
+                              onClick={() => {
+                                // handlePlayClick(item.url);
+                                this.setMediaAndClose(e, { value: item.url });
+                              }}
+                              className="absolute top-[50%] cursor-pointer left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                            >
+                              <img
+                                src={playIcon2}
+                                className="z-10"
+                                alt=""
+                                width="100%"
+                              />
+                            </div>
+                          </div>
+                          <div className="">
+                            <div className="flex space-x-2 justify-between">
+                              <button
+                                onClick={() => {
+                                  // handlePlayClick(item.url);
+                                  this.setMediaAndClose(e, { value: item.url });
+                                }}
+                                className="btn capitalize bg-white flex-1 text-black/80 hover:bg-white"
+                              >
+                                Play Now
+                              </button>
+                              <button
+                                onClick={() => {
+                                  this.props.playlistAdd(null, {
+                                    value: item.url,
+                                  });
+                                }}
+                                className="btn bg-white hover:bg-white"
+                              >
+                                <img
+                                  className="cursor-pointer rotate-180"
+                                  src={addPlaylistIcon}
+                                  alt=""
+                                />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ))
                 : undefined;
-
-            // {/* ====================== OLD VIEW ====================== */}
-            // results = items.map((result: SearchResult, index: number) => (
-            //   <Menu.Item
-            //     style={{ padding: '2px' }}
-            //     key={result.url}
-            //     onClick={(e: any) =>
-            //       this.setMediaAndClose(e, { value: result.url })
-            //     }
-            //   >
-            //     <ChatVideoCard
-            //       video={result}
-            //       index={index}
-            //       onPlaylistAdd={this.props.playlistAdd}
-            //     />
-            //   </Menu.Item>
-            // ));
-          } else {
+          } else if (query !== '') {
             const data = await getYouTubeResults(query);
+
+            // this.props.setVideoItems(data);
             results =
               data?.length > 0
-                ? data?.map((result: SearchResult, index: number) => (
-                    <Grid.Column
-                      key={result.url}
-                      onClick={(e: any) => {
-                        this.setMediaAndClose(e, { value: result.url });
-                      }}
-                      stretched
-                    >
-                      <ChatVideoCard
-                        video={result}
-                        index={index}
-                        onPlaylistAdd={this.props.playlistAdd}
-                        isYoutube
-                      />
-                    </Grid.Column>
+                ? data?.map((item: SearchResult, index: number) => (
+                    <>
+                      <div key={item.url} className="">
+                        <div className="p-4 lg:p-[0.75vw] w-[25vw] lg:w-[15vw] bg-[#333] rounded-lg">
+                          <div className="flex overflow-hidden space-y-2 flex-col">
+                            <div className="w-full animate-marquee whitespace-nowrap">
+                              <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
+                                {item.name}
+                              </h4>
+                            </div>
+                            <div className="relative h-[80px] lg:h-[160px] w-[100%]">
+                              <ReactPlayer
+                                className="z-10 rounded-xl overflow-hidden"
+                                url={item.url}
+                                playing={false}
+                                controls={false}
+                                muted
+                                height="100%"
+                                width="100%"
+                                light
+                              />
+                              <span
+                                onClick={() => {
+                                  this.setMediaAndClose(e, { value: item.url });
+                                  // this.props.toggleHome()
+                                }}
+                                className="absolute left-0 top-0 h-full z-50 w-full"
+                              ></span>
+                              <div
+                                onClick={() => {
+                                  // handlePlayClick(item.url);
+                                  this.setMediaAndClose(e, { value: item.url });
+                                }}
+                                className="absolute top-[50%] cursor-pointer left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                              >
+                                <img
+                                  src={playIcon2}
+                                  className="z-10"
+                                  alt=""
+                                  width="100%"
+                                />
+                              </div>
+                            </div>
+                            <div className="">
+                              <div className="flex space-x-2 justify-between">
+                                <button
+                                  onClick={() => {
+                                    // handlePlayClick(item.url);
+                                    this.setMediaAndClose(e, {
+                                      value: item.url,
+                                    });
+                                  }}
+                                  className="btn capitalize bg-white hover:bg-white flex-1 text-black/80 "
+                                >
+                                  Play Now
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    this.props.playlistAdd(null, {
+                                      value: item.url,
+                                    });
+                                  }}
+                                  className="btn bg-white hover:bg-white"
+                                >
+                                  <img
+                                    className="cursor-pointer rotate-180"
+                                    src={addPlaylistIcon}
+                                    alt=""
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <Grid.Column
+									key={result.url}
+									onClick={(e: any) => {
+										this.setMediaAndClose(e, { value: result.url });
+									}}
+									stretched
+								>
+									<ChatVideoCard
+										video={result}
+										index={index}
+										onPlaylistAdd={this.props.playlistAdd}
+										isYoutube
+									/>
+								</Grid.Column> */}
+                    </>
                   ))
                 : undefined;
-
-            // {/* ====================== Old View ====================== */ }
-            // results = data.map((result, index) => (
-            //   <Menu.Item
-            //     key={result.url}
-            //     onClick={(e: any) =>
-            //       this.setMediaAndClose(e, { value: result.url })
-            //     }
-            //   >
-            //     <ChatVideoCard
-            //       video={result}
-            //       index={index}
-            //       onPlaylistAdd={this.props.playlistAdd}
-            //       isYoutube
-            //     />
-            //   </Menu.Item>
-            // ));
           }
+
           if (timestamp > this.state.lastResultTimestamp) {
             this.setState({
               loading: false,
@@ -226,6 +325,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
           }
         }, 500);
       }
+
       this.debounced();
     });
   };
@@ -282,7 +382,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               }}
               className="p-0 border-none"
               img={BackIcon}
-              imgClass="rounded-full h-16"
+              imgClass="rounded-full h-16 lg:h-[3vw]"
             ></MetaButton>
 
             <div className={styles.inputContainer}>
@@ -298,8 +398,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                     e.persist();
                     this.setState(
                       {
-                        inputMedia:
-                          clipboard ?? getMediaDisplayName(currentMedia),
+                        inputMedia: clipboard ?? '',
                         isHome: false,
                       },
                       () => {
@@ -316,16 +415,16 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                     setTimeout(() => e.target.select(), 100);
                   }}
                   type="search"
-                  onBlur={() => {
-                    setTimeout(
-                      () =>
-                        this.setState({
-                          inputMedia: undefined,
-                          results: undefined,
-                        }),
-                      200
-                    );
-                  }}
+                  //   onBlur={() => {
+                  //     setTimeout(
+                  //       () =>
+                  //         this.setState({
+                  //           inputMedia: undefined,
+                  //           results: undefined,
+                  //         }),
+                  //       200
+                  //     );
+                  //   }}
                   onKeyPress={(e: any) => {
                     if (e.key === 'Enter') {
                       this.setMediaAndClose(e, {
@@ -339,7 +438,7 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                       ? this.state.inputMedia
                       : clipboard
                       ? clipboard
-                      : getMediaDisplayName(currentMedia)
+                      : ''
                   }
                   placeholder="Enter or paste your video URL"
                   className="input w-full px-14 py-8 text-lg rounded-xl text-gray bg-white/90 border-none focus:outline-0 focus:border-none focus:ring-0"
@@ -350,7 +449,11 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                   className=" bg-white/80  m-1 p-3  active:bg-white/50 border-none rounded-xl"
                   onClick={() => this.copyFromClipboard()}
                 >
-                  <img src={clipboardIcon} alt="s" className="h-8" />
+                  <img
+                    src={clipboardIcon}
+                    alt="s"
+                    className="h-8 lg:h-[1.5vw]"
+                  />
                 </button>
               </span>
             </div>
@@ -455,11 +558,11 @@ export class ComboBox extends React.Component<ComboBoxProps> {
           Boolean(results) &&
           this.state.inputMedia !== undefined && (
             <div className={styles.wrapper}>
-              <Grid className={styles['list-container']}>
-                <Grid.Row columns={2} padded>
-                  {results}
-                </Grid.Row>
-              </Grid>
+              <div
+                className={`bg-[#3A3A3A] rounded-lg ${styles['list-container']} space-x-3 flex overflow-x-scroll whitespace-nowrap -mt-2  p-2`}
+              >
+                {results}
+              </div>
             </div>
           )}
         {/* ====================== Search list end ====================== */}

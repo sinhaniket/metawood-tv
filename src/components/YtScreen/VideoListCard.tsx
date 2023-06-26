@@ -4,11 +4,13 @@ import playIcon from '../../assets/icons/playIcon.svg';
 
 const VideoListCard = ({ item, playlistAdd, onSetMedia, toggleHome }: any) => {
   return (
-    <div className="bg-[#232323] py-2 px-3 rounded-lg min-w-[200px] lg:min-w-[400px] overflow-hidden min-h-fit">
+    <div className="bg-[#232323] py-2 lg:py-[0.3vw] px-3 rounded-lg min-w-[200px] lg:min-w-[400px] overflow-hidden min-h-fit">
       <div className="flex space-y-3 flex-col">
         <div className="relative flex w-full overflow-x-hidden">
           <div className="w-full animate-marquee whitespace-nowrap">
-            <h4 className=" m-0 text-md font-bold text-white">{item.name}</h4>
+            <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
+              {item.name}
+            </h4>
           </div>
         </div>
         <div className="relative">
@@ -29,7 +31,7 @@ const VideoListCard = ({ item, playlistAdd, onSetMedia, toggleHome }: any) => {
             // e.nativeEvent.stopImmediatePropagation();
             playlistAdd(null, { value: item.url });
           }}
-          className="text-[16px] rounded-lg font-bold px-3 py-2 bg-white w-full"
+          className="text-[16px] rounded-lg font-bold px-3 py-2 lg:py-[0.3vw] bg-white w-full"
         >
           Add to playlist
         </button>
