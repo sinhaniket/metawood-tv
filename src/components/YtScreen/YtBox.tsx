@@ -148,12 +148,12 @@ const YtBox = (props: IYtBoxProps) => {
           </div>
 
           <div
-            className={`bg-[#3A3A3A] rounded-lg ${classes.scrollbarContainer} space-x-3 flex overflow-x-scroll whitespace-nowrap mt-6 p-2`}
+            className={`bg-[#3A3A3A] rounded-lg ${classes.scrollbarContainer} space-x-3 flex overflow-x-scroll scrollable-content whitespace-nowrap mt-6 p-2`}
           >
             {props.videoItems?.length > 0 ? (
               props.videoItems?.map((item: SearchResult, key) => {
                 return (
-                  <div key={item.url} className="w-[30%]">
+                  <div key={item.url} className="w-[30%] min-w-[30%]">
                     <div className="p-4  bg-[#333] rounded-lg">
                       <div className="flex overflow-hidden space-y-2 flex-col">
                         <div className="w-full animate-marquee whitespace-nowrap">
@@ -161,7 +161,7 @@ const YtBox = (props: IYtBoxProps) => {
                             {item.name}
                           </h4>
                         </div>
-                        <div className="relative h-[80px]">
+                        <div className="relative h-[13vw] lg:h-[12vw] w-full">
                           {/* <img
 												className="w-full lg:h-full h-[132px]  min-w-[180px] lg:min-h-[140px] rounded-md"
 												src={item.img}
@@ -201,7 +201,7 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 handlePlayClick(item.url);
                               }}
-                              className="btn capitalize bg-white flex-1 text-black/80 "
+                              className="btn capitalize bg-white hover:text-[#fff] flex-1 text-black/80 "
                             >
                               Play Now
                             </button>
@@ -215,6 +215,15 @@ const YtBox = (props: IYtBoxProps) => {
                                 className="cursor-pointer rotate-180"
                                 src={addPlaylistIcon}
                                 alt=""
+                                style={{
+                                  fill: '#FF0000', // Replace '#FF0000' with your default color
+                                }}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.fill = '#00FF00')
+                                } // Replace '#00FF00' with your hover color
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.fill = '#FF0000')
+                                } // Reset to the default color on mouse out
                               />
                             </button>
                           </div>

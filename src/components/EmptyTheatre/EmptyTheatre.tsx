@@ -64,16 +64,16 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
 
   const swiperRef = React.useRef<SwiperCore | null>(null);
 
-  const handleNextSlide = (type: string) => {
-    if (swiperRef.current && type === 'prev') {
-      swiperRef.current.slidePrev();
-      setActiveSlideIndex(activeSlideIndex - 1);
-    }
-    if (swiperRef.current && type === 'next') {
-      swiperRef.current.slideNext();
-      setActiveSlideIndex(activeSlideIndex + 1);
-    }
-  };
+  // const handleNextSlide = (type: string) => {
+  //   if (swiperRef.current && type === 'prev') {
+  //     swiperRef.current.slidePrev();
+  //     setActiveSlideIndex(activeSlideIndex - 1);
+  //   }
+  //   if (swiperRef.current && type === 'next') {
+  //     swiperRef.current.slideNext();
+  //     setActiveSlideIndex(activeSlideIndex + 1);
+  //   }
+  // };
   React.useEffect(() => {
     const handleResize = () => {
       const isMobileScreen = window.innerWidth <= 868; // Adjust the threshold as needed
@@ -229,7 +229,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
 			</div> */}
 
       {/* swipper */}
-      <button
+      {/* <button
         className="bg-inherit absolute z-30 top-[80%] translate-y-[-20%] left-[40%]"
         onClick={() => handleNextSlide('prev')}
       >
@@ -240,7 +240,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
         onClick={() => handleNextSlide('next')}
       >
         <img src={arrowLeft} alt="" className="h-16 rotate-180" />
-      </button>
+      </button> */}
       <div className="w-4/5 h-full mt-10 lg:mt-20">
         <Swiper
           freeMode

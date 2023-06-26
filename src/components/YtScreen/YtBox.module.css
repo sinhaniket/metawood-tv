@@ -1,27 +1,33 @@
 .scrollbarContainer::-webkit-scrollbar {
   width: 6px !important;
+  display: none;
 }
 
 .scrollbarContainer::-webkit-scrollbar-thumb {
   background-color: #e0e0e0;
   border-radius: 9999px;
+  display: none;
 }
 
 .scrollbarContainer::-webkit-scrollbar-track {
   background-color: rgba(197, 197, 197, 0.3);
   border-radius: 12px;
+  display: none;
 }
 
 .scrollbarContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e0e0e0;
+  display: none;
 }
 
 .scrollbarContainer::-webkit-scrollbar-thumb:active {
   background-color: #e0e0e0;
+  display: none;
 }
 
 .scrollbarContainer::-webkit-scrollbar-track:hover {
   background-color: rgba(197, 197, 197, 0.3);
+  display: none;
 }
 .boxShadowCustom {
   box-shadow: 0 0 12px -2px white;
