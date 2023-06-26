@@ -241,60 +241,56 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
       >
         <img src={arrowLeft} alt="" className="h-16 rotate-180" />
       </button> */}
-      <div className="w-4/5 h-full mt-10 lg:mt-20">
-        <Swiper
-          freeMode
-          onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
-          spaceBetween={isMobile ? 20 : 45}
-          watchSlidesProgress={true}
-          slidesPerView={4.5}
-          className="mySwiper"
+      <div className="w-4/5 h-full z-10 mt-10 lg:mt-20">
+        <div
+          className={`bg-transparent rounded-lg ${classes.scrollbarContainer} space-x-3 lg:space-x-8 flex overflow-x-scroll scrollable-content whitespace-nowrap p-2`}
         >
-          <SwiperSlide
-            className={`bg-gradient-to-r from-white to-[#ABABAB] ${
+          <div
+            className={`bg-gradient-to-r w-[33%] min-w-[33%] h-[20vw] from-white to-[#ABABAB] ${
               classes.btnBoxShadow
             } ${
               !currentMedia && 'opacity-70'
             } btn border-0 capitalize   rounded-xl  relative`}
           >
-            <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[38px]  text-[#49454f]">
-              <span>
-                <img
-                  src={playIcon}
-                  alt=""
-                  className="h-8 lg:h-12 mr-1 opacity-70"
-                />
-              </span>{' '}
-              Now Playing
+            <div className="flex flex-col">
+              <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[38px]  text-[#49454f]">
+                <span>
+                  <img
+                    src={playIcon}
+                    alt=""
+                    className="h-8 lg:h-12 mr-1 opacity-70"
+                  />
+                </span>{' '}
+                Now Playing
+              </div>
+              <span
+                onClick={() => currentMedia && toggleHome()}
+                className="absolute left-0 top-0 h-full z-50 w-full"
+              ></span>
+              <div className="flex justify-center items-center h-2/3 lg:mt-6">
+                {currentMedia && !state.currentMediaPaused ? (
+                  <ReactPlayer
+                    className="z-10 rounded-xl overflow-hidden"
+                    url={currentMedia}
+                    playing={false}
+                    controls={false}
+                    muted
+                    height="100%"
+                    width="80%"
+                    light
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center lg:text-[38px] mt-2 lg:leading-10 text-[#49454f] capitalize">
+                    <img src={CoffeIcon} alt="" className="lg:h-36 mb-1" />
+                    Coffee break {!isMobile && <br />} at the moment
+                  </div>
+                )}
+              </div>
             </div>
-            <span
-              onClick={() => currentMedia && toggleHome()}
-              className="absolute left-0 top-0 h-full z-50 w-full"
-            ></span>
-            <div className="flex justify-center items-center h-2/3 lg:mt-6">
-              {currentMedia && !state.currentMediaPaused ? (
-                <ReactPlayer
-                  className="z-10 rounded-xl overflow-hidden"
-                  url={currentMedia}
-                  playing={false}
-                  controls={false}
-                  muted
-                  height="100%"
-                  width="80%"
-                  light
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center lg:text-[38px] mt-2 lg:leading-10 text-[#49454f] capitalize">
-                  <img src={CoffeIcon} alt="" className="lg:h-36 mb-1" />
-                  Coffee break {!isMobile && <br />} at the moment
-                </div>
-              )}
-            </div>
-          </SwiperSlide>
-          <SwiperSlide
+          </div>
+          <div
             onClick={() => props.playlist.length && showPlaylist()}
-            className={`bg-gradient-to-r btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
+            className={`bg-gradient-to-r w-[33%] min-w-[33%] h-[20vw] btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
           >
             <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[38px] text-[#49454f]">
               <span>
@@ -302,9 +298,9 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
               </span>
               Playlist ({props.playlist.length})
             </div>
-          </SwiperSlide>
-          <SwiperSlide
-            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center items-center btn border-0 hover:bg-[#d20001]`}
+          </div>
+          <div
+            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center btn border-0 hover:bg-[#d20001]`}
           >
             <div
               onClick={() => {
@@ -314,9 +310,9 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             >
               <img className="mx-auto h-32 lg:h-52" src={yt} alt="" />
             </div>
-          </SwiperSlide>
-          <SwiperSlide
-            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center items-center rounded-xl h-full btn border-0 capitalize`}
+          </div>
+          <div
+            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center rounded-xl  btn border-0 capitalize`}
           >
             <div
               className="flex justify-center items-center rounded-xl h-full"
@@ -331,9 +327,9 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                 alt=" uploadIcon"
               />
             </div>
-          </SwiperSlide>
-          <SwiperSlide
-            className={` bg-[#27a2dd] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center items-center rounded-xl btn border-0 capitalize`}
+          </div>
+          <div
+            className={` bg-[#27a2dd] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center rounded-xl btn border-0 capitalize`}
           >
             <div className="flex justify-center items-center rounded-xl h-full">
               <span className="text-white font-semibold text-[28px] lg:text-[48px]">
@@ -345,15 +341,15 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                 alt="uploadIcon"
               />
             </div>
-          </SwiperSlide>
+          </div>
 
-          <SwiperSlide
+          {/* <SwiperSlide
             className={`justify-center items-center rounded-xl hidden`}
           ></SwiperSlide>
           <SwiperSlide
             className={`justify-center items-center rounded-xl hidden`}
-          ></SwiperSlide>
-        </Swiper>
+          ></SwiperSlide> */}
+        </div>
       </div>
 
       {/* <section className="flex flex-col w-[75%] h-screen items-center gap-1 justify-start mt-10 lg:mt-0 lg:justify-center">
