@@ -2,6 +2,10 @@
   width: 6px !important;
   display: none;
 }
+.scrollbarContainer {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
 
 .scrollbarContainer::-webkit-scrollbar-thumb {
   background-color: #e0e0e0;

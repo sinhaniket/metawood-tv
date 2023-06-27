@@ -253,12 +253,12 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             } btn border-0 capitalize   rounded-xl  relative`}
           >
             <div className="flex flex-col">
-              <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[38px]  text-[#49454f]">
+              <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[0.8vw]  text-[#49454f]">
                 <span>
                   <img
                     src={playIcon}
                     alt=""
-                    className="h-8 lg:h-12 mr-1 opacity-70"
+                    className="h-8 lg:h-[1.5vw] mr-1 opacity-70"
                   />
                 </span>{' '}
                 Now Playing

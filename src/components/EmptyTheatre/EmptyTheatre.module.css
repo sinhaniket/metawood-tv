@@ -119,6 +119,10 @@
   background: inherit;
   padding: 0px !important;
 }
+.scrollbarContainer {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
 .scrollbarContainer::-webkit-scrollbar {
   width: 6px !important;
   display: none;

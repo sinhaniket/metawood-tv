@@ -101,7 +101,11 @@ const PlaylistPage = (props: PropsType) => {
                 }`}
               >
                 <span>
-                  <img src={playIcon} alt="" className="h-8 mr-1 opacity-70" />
+                  <img
+                    src={playIcon}
+                    alt=""
+                    className="h-8 lg:h-[1.5vw] mr-1 opacity-70"
+                  />
                 </span>{' '}
                 Now Playing
               </button>

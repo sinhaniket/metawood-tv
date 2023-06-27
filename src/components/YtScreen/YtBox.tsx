@@ -153,11 +153,14 @@ const YtBox = (props: IYtBoxProps) => {
             {props.videoItems?.length > 0 ? (
               props.videoItems?.map((item: SearchResult, key) => {
                 return (
-                  <div key={item.url} className="w-[30%] min-w-[30%]">
+                  <div
+                    key={item.url}
+                    className="w-[30%] lg:w-[20%] lg:min-w-[20%] min-w-[30%]"
+                  >
                     <div className="p-4 lg:p-[0.75vw]  bg-[#333] rounded-lg">
                       <div className="flex overflow-hidden space-y-2 flex-col">
                         <div className="w-full animate-marquee whitespace-nowrap">
-                          <h4 className=" m-0 text-md lg:text-[0.7vw] font-bold text-white">
+                          <h4 className=" m-0 text-md lg:text-[0.9vw] font-bold text-white">
                             {item.name}
                           </h4>
                         </div>
@@ -200,7 +203,7 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 handlePlayClick(item.url);
                               }}
-                              className="btn capitalize bg-white hover:text-[#fff] h-auto lg:h-[2.1vw] flex-1 text-sm lg:text-[0.7vw] text-black/80 "
+                              className="btn capitalize bg-white hover:text-[#fff] h-auto lg:h-[2.1vw] flex-1 text-sm lg:text-[0.9vw] text-black/80 "
                             >
                               Play Now
                             </button>

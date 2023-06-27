@@ -386,8 +386,8 @@ export class ComboBox extends React.Component<ComboBoxProps> {
             ></MetaButton>
 
             <div className={styles.inputContainer}>
-              <span className="absolute left-3 top-3">
-                <img src={searchIcon} alt="s" className="h-10" />
+              <span className="absolute left-3 top-[50%] translate-y-[-50%]">
+                <img src={searchIcon} alt="s" className="h-10 lg:h-[1.25vw]" />
               </span>
               <div>
                 <input
@@ -441,18 +441,18 @@ export class ComboBox extends React.Component<ComboBoxProps> {
                       : ''
                   }
                   placeholder="Enter or paste your video URL"
-                  className="input w-full px-14 py-8 text-lg rounded-xl text-gray bg-white/90 border-none focus:outline-0 focus:border-none focus:ring-0"
+                  className="input w-full px-14 lg:py-[1.4vw] lg:px-[2.5vw] py-8 text-lg lg:text-[0.8vw] lg:placeholder:text-[0.8vw] rounded-xl text-gray bg-white/90 border-none focus:outline-0 focus:border-none focus:ring-0"
                 />
               </div>
               <span className="absolute right-0 top-0 cursor-pointer ">
                 <button
-                  className=" bg-white/80  m-1 p-3  active:bg-white/50 border-none rounded-xl"
+                  className=" bg-white/80  m-1 p-3 lg:p-[0.4vw] active:bg-white/50 border-none rounded-xl"
                   onClick={() => this.copyFromClipboard()}
                 >
                   <img
                     src={clipboardIcon}
                     alt="s"
-                    className="h-8 lg:h-[1.5vw]"
+                    className="h-8 lg:h-[1.7vw]"
                   />
                 </button>
               </span>
@@ -471,14 +471,18 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               </button>
             </div> */}
             {/* ====================== PLAYLIST content ====================== */}
-            <div className="dropdown dropdown-end w-[280px]">
+            <div className="dropdown dropdown-end lg:w-[8vw] w-[280px]">
               <label
                 onClick={() => showPlaylist()}
                 tabIndex={1}
-                className="btn btn-lg font-semibold text-xl mx-1 hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
+                className="btn btn-lg py-0 h-full lg:py-[0.7vw] font-semibold text-xl mx-1 lg:text-[0.8vw] hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
               >
                 <span>
-                  <img src={playlistIcon} alt="" className="h-8 mr-2" />
+                  <img
+                    src={playlistIcon}
+                    alt=""
+                    className="h-8 lg:h-[1.25vw] mr-2"
+                  />
                 </span>
                 Playlist ({this.props.playlist.length})
               </label>

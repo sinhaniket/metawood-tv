@@ -451,12 +451,16 @@ export class SearchBox extends React.Component<SearchBoxProps> {
             <div className="relative">
               <button
                 onClick={() => toggleHome()}
-                className={`btn btn-md font-bold text-[14px] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80  rounded-xl border-none capitalize opacity-${
+                className={`btn btn-md font-bold py-[0] px-[10px] lg:py-[0.25vw] lg:px-[1.3vw] ml-[8px] lg:ml-[.5vw] h-full text-[14px] lg:text-[0.8vw] bg-[#EFFF33] hover:bg-[#EFFF33] text-black/80  rounded-xl border-none capitalize opacity-${
                   this.state.opacity * 100
                 }`}
               >
-                <span className="flex justify-between items-center">
-                  <img src={playIcon} alt="" className="h-8 mr-1 opacity-70" />
+                <span className="flex justify-between h-full items-center">
+                  <img
+                    src={playIcon}
+                    alt=""
+                    className="h-8 lg:h-[1.5vw] mr-1 opacity-70"
+                  />
                   Now Playing
                 </span>{' '}
               </button>
