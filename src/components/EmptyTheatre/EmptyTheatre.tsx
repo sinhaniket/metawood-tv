@@ -290,7 +290,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
           </div>
           <div
             onClick={() => props.playlist.length && showPlaylist()}
-            className={`bg-gradient-to-r w-[33%] min-w-[33%] h-[20vw] btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
+            className={`bg-gradient-to-r w-[27%] min-w-[27%] h-[20vw] btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
           >
             <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[1.8vw] text-[#49454f]">
               <span>
@@ -300,7 +300,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             </div>
           </div>
           <div
-            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center btn border-0 hover:bg-[#d20001]`}
+            className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center w-[27%] min-w-[27%] h-[20vw] items-center btn border-0 hover:bg-[#d20001]`}
           >
             <div
               onClick={() => {
@@ -312,7 +312,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             </div>
           </div>
           <div
-            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center rounded-xl  btn border-0 capitalize`}
+            className={`${classes.uploadBtnBg} ${classes.btnBoxShadow} flex justify-center w-[27%] min-w-[27%] h-[20vw] items-center rounded-xl  btn border-0 capitalize`}
           >
             <div
               className="flex justify-center items-center rounded-xl h-full"
@@ -329,7 +329,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             </div>
           </div>
           <div
-            className={` bg-[#27a2dd] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center w-[33%] min-w-[33%] h-[20vw] items-center rounded-xl btn border-0 capitalize`}
+            className={` bg-[#27a2dd] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center w-[27%] min-w-[27%] h-[20vw] items-center rounded-xl btn border-0 capitalize`}
           >
             <div className="flex justify-center items-center rounded-xl h-full">
               <span className="text-white font-semibold text-[28px] lg:text-[48px]">
