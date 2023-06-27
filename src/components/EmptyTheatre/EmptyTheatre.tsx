@@ -246,14 +246,14 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
           className={`bg-transparent rounded-lg ${classes.scrollbarContainer} space-x-3 lg:space-x-8 flex overflow-x-scroll scrollable-content whitespace-nowrap p-2`}
         >
           <div
-            className={`bg-gradient-to-r w-[33%] min-w-[33%] h-[20vw] from-white to-[#ABABAB] ${
+            className={`bg-gradient-to-r w-[27%] min-w-[27%] h-[20vw] from-white to-[#ABABAB] ${
               classes.btnBoxShadow
             } ${
               !currentMedia && 'opacity-70'
             } btn border-0 capitalize   rounded-xl  relative`}
           >
             <div className="flex flex-col">
-              <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[0.8vw]  text-[#49454f]">
+              <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[1.5vw]  text-[#49454f]">
                 <span>
                   <img
                     src={playIcon}
@@ -280,7 +280,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                     light
                   />
                 ) : (
-                  <div className="flex flex-col items-center justify-center lg:text-[38px] mt-2 lg:leading-10 text-[#49454f] capitalize">
+                  <div className="flex flex-col items-center justify-center lg:text-[1.8vw] mt-2 lg:leading-10 text-[#49454f] capitalize">
                     <img src={CoffeIcon} alt="" className="lg:h-36 mb-1" />
                     Coffee break {!isMobile && <br />} at the moment
                   </div>
@@ -292,7 +292,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             onClick={() => props.playlist.length && showPlaylist()}
             className={`bg-gradient-to-r w-[33%] min-w-[33%] h-[20vw] btn border-0  from-white to-[#ABABAB] ${classes.btnBoxShadow} flex capitalize justify-center items-center rounded-xl`}
           >
-            <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[38px] text-[#49454f]">
+            <div className="flex font-[800] justify-center items-center rounded-xl h-full lg:text-[1.8vw] text-[#49454f]">
               <span>
                 <img src={playlistIcon} alt="" className="h-16 lg:h-28 mr-2" />
               </span>
