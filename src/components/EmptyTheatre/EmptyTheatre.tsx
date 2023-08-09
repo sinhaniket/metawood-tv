@@ -61,7 +61,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(true);
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
   const [activeSlideIndex, setActiveSlideIndex] = React.useState(0);
-
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const swiperRef = React.useRef<SwiperCore | null>(null);
 
   // const handleNextSlide = (type: string) => {
@@ -74,6 +74,21 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
   //     setActiveSlideIndex(activeSlideIndex + 1);
   //   }
   // };
+  const handleScroll = () => {
+    // Perform actions on scroll
+    console.log('Slider scrolled!');
+  };
+
+  React.useEffect(() => {
+    const containerElement = containerRef.current;
+    if (containerElement) {
+      containerElement.addEventListener('scroll', handleScroll);
+      return () => {
+        containerElement.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+
   React.useEffect(() => {
     const handleResize = () => {
       const isMobileScreen = window.innerWidth <= 868; // Adjust the threshold as needed
@@ -93,6 +108,26 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
   }, []);
   const toggleFScreen = (): void => {
     setIsFullScreen(!isFullScreen);
+  };
+
+  /* ====================== 
+touch listener 
+====================== */
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    console.log('Touch start event:', event);
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    console.log('Touch end event:', event);
+  };
+
+  const handleMouseStart = (event: React.MouseEvent<HTMLDivElement>) => {
+    console.log('Mouse down event: [pageX, pageY]', event.pageX, event.pageY);
+  };
+
+  const handleMouseEnd = (event: React.MouseEvent<HTMLDivElement>) => {
+    console.log('Mouse up event: [pageX, pageY]', event.pageX, event.pageY);
   };
   React.useEffect(() => {
     // ((state as AppState).clipboard && (state as AppState).currentMedia) && setLoadingFalse();
@@ -241,7 +276,14 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
       >
         <img src={arrowLeft} alt="" className="h-16 rotate-180" />
       </button> */}
-      <div className="w-4/5 h-full z-10 mt-10 lg:mt-20">
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseStart}
+        onMouseUp={handleMouseEnd}
+        ref={containerRef}
+        className="w-full  ml-[10%] h-full z-10 mt-10 lg:mt-20"
+      >
         <div
           className={`bg-transparent rounded-lg ${classes.scrollbarContainer} space-x-3 lg:space-x-8 flex overflow-x-scroll scrollable-content whitespace-nowrap p-2`}
         >
@@ -252,7 +294,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
               !currentMedia && 'opacity-70'
             } btn border-0 capitalize   rounded-xl  relative`}
           >
-            <div className="flex flex-col">
+            <div className="flex flex-col w-2/3">
               <div className="flex justify-center items-center font-[800] rounded-xl lg:mt-6  lg:mb-2  lg:text-[1.5vw]  text-[#49454f]">
                 <span>
                   <img
@@ -267,7 +309,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                 onClick={() => currentMedia && toggleHome()}
                 className="absolute left-0 top-0 h-full z-50 w-full"
               ></span>
-              <div className="flex justify-center items-center h-2/3 lg:mt-6">
+              <div className="flex justify-center items-center h-[90px] lg:h-[180px] lg:mt-6">
                 {currentMedia && !state.currentMediaPaused ? (
                   <ReactPlayer
                     className="z-10 rounded-xl overflow-hidden"
@@ -276,7 +318,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
                     controls={false}
                     muted
                     height="100%"
-                    width="80%"
+                    width="100%"
                     light
                   />
                 ) : (
@@ -300,14 +342,12 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
             </div>
           </div>
           <div
+            onClick={() => {
+              gotoYTScreen();
+            }}
             className={`${classes.btnBoxShadow} bg-[#d20001] rounded-xl  flex justify-center w-[27%] min-w-[27%] h-[20vw] items-center btn border-0 hover:bg-[#d20001]`}
           >
-            <div
-              onClick={() => {
-                gotoYTScreen();
-              }}
-              className="flex justify-center items-center rounded-xl h-full"
-            >
+            <div className="flex justify-center items-center rounded-xl h-full">
               <img className="mx-auto h-32 lg:h-52" src={yt} alt="" />
             </div>
           </div>

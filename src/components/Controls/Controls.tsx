@@ -181,7 +181,10 @@ export class Controls extends React.Component<ControlsProps> {
               imgClass="h-16"
             ></MetaButton>
             <MetaButton
-              onClick={() => togglePlay()}
+              onClick={() => {
+                console.log(`${paused ? 'Pause' : 'Play'} Button Clicked`);
+                togglePlay();
+              }}
               img={paused ? PlayIcon : PauseIcon}
               className="bg-transparent"
               imgClass="h-16"

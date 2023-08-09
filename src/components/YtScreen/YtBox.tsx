@@ -203,7 +203,7 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 handlePlayClick(item.url);
                               }}
-                              className="btn capitalize bg-white hover:text-[#fff] h-auto lg:h-[2.1vw] flex-1 text-sm lg:text-[0.9vw] text-black/80 "
+                              className="btn capitalize bg-white hover:bg-white  h-auto lg:h-[2.1vw] flex-1 text-sm lg:text-[0.9vw] text-black/80 "
                             >
                               Play Now
                             </button>
@@ -211,7 +211,7 @@ const YtBox = (props: IYtBoxProps) => {
                               onClick={() => {
                                 playlistAdd(null, { value: item.url });
                               }}
-                              className="btn h-full bg-white"
+                              className="btn h-full bg-white hover:bg-white"
                             >
                               <img
                                 className="cursor-pointer w-auto lg:w-[1.3vw] h-auto lg:h-[2vw] rotate-180"

@@ -232,7 +232,15 @@ export default class App extends React.Component<AppProps, AppState> {
   chatRef = React.createRef<Chat>();
   playerRef = React.createRef<ReactPlayer>();
   intervalId: any = null;
+
   async componentDidMount() {
+    if (window.vuplex) {
+      this.addMessageListener();
+    } else {
+      console.log('🔰 Vuplex Ready For Listening 🔰');
+      window.addEventListener('vuplexready', this.addMessageListener);
+    }
+
     document.onfullscreenchange = this.onFullScreenChange;
     document.onkeydown = this.onKeydown;
 
@@ -324,7 +332,45 @@ export default class App extends React.Component<AppProps, AppState> {
       this.loadSignInData();
     }
   }
+  fade = (param: boolean) => {
+    if (param) {
+      setTimeout(() => {
+        if (this.getVolume() > 0.05) {
+          this.setVolume(this.getVolume() - 0.05);
+          this.fade(true);
+        }
+      }, 10);
+    } else {
+      setTimeout(() => {
+        if (this.getVolume() < 0.8) {
+          this.setVolume(this.getVolume() + 0.05);
+          this.fade(false);
+        }
+      }, 10);
+    }
+  };
+  addMessageListener = () => {
+    window.vuplex.addEventListener('message', (event: any) => {
+      let json = event.data;
+      // > JSON received: { "type": "greeting", "message": "Hello from C#!" }
+      console.log('JSON received: ' + json);
 
+      if (json.type === 'mute') {
+        this.toggleMute();
+      }
+      if (json.type === 'fadeIn') {
+        this.fade(true);
+      }
+
+      if (json.type === 'fadeOut') {
+        this.fade(false);
+      }
+
+      if (json.type === 'setVolume') {
+        this.setVolume(json?.message ?? this.getVolume());
+      }
+    });
+  };
   loadSettings = async () => {
     // Load settings from localstorage
     let settings = getCurrentSettings();
@@ -1166,9 +1212,10 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState(
       { currentMediaPaused: false, isAutoPlayable: canAutoplay },
       async () => {
+        console.log('player started');
         if (this.isYouTube()) {
           setTimeout(() => {
-            console.log('--playing yt--');
+            // console.log('--playing yt--');
             try {
               this.watchPartyYTPlayer?.playVideo();
               // console.log(window.YT?.PlayerState.PAUSED);
@@ -1177,7 +1224,7 @@ export default class App extends React.Component<AppProps, AppState> {
               console.log('error: ', error);
               this.showOverlap();
             }
-          }, 500);
+          }, 700);
         }
       }
     );
@@ -1185,8 +1232,8 @@ export default class App extends React.Component<AppProps, AppState> {
 
   doPause = () => {
     this.setState({ currentMediaPaused: true }, async () => {
+      console.log('player paused');
       if (this.isYouTube()) {
-        console.log('yt pause');
         this.watchPartyYTPlayer?.pauseVideo();
       }
     });

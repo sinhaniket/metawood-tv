@@ -471,17 +471,17 @@ export class ComboBox extends React.Component<ComboBoxProps> {
               </button>
             </div> */}
             {/* ====================== PLAYLIST content ====================== */}
-            <div className="dropdown dropdown-end lg:w-[8vw] w-[280px]">
+            <div className="dropdown dropdown-end lg:w-[10vw] w-[280px]">
               <label
                 onClick={() => showPlaylist()}
                 tabIndex={1}
-                className="btn btn-lg py-0 h-full lg:py-[0.7vw] font-semibold text-xl mx-1 lg:text-[0.8vw] hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
+                className="btn btn-lg py-0 h-full  font-semibold text-xl mx-1 lg:text-[0.8vw] hover:bg-white bg-white text-black/80 rounded-xl outline-0 border-0 active:outline-0 focus:outline-0 capitalize w-full"
               >
                 <span>
                   <img
                     src={playlistIcon}
                     alt=""
-                    className="h-8 lg:h-[1.25vw] mr-2"
+                    className="h-8 lg:h-[2.25vw] mr-2"
                   />
                 </span>
                 Playlist ({this.props.playlist.length})
