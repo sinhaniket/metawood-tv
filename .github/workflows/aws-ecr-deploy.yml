@@ -26,7 +26,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push image to Amazon ECR
-      if: startsWith(github.ref, 'refs/heads/inet-tnsc-reborn')
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: metawood/metawood-tv
