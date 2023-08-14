@@ -36,17 +36,17 @@ jobs:
 
     - name: Download task definition
       env:
-        TASK_DEFINITION_FAMILY: metawood-tv
+        ECS_TASK_DEFINITION_FAMILY: metawood-tv
       run: |
-        aws ecs describe-task-definition --task-definition $TASK_DEFINITION_FAMILY --query taskDefinition > task-definition.json
+        aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_FAMILY --query taskDefinition > task-definition.json
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       env:
-        SERVICE: metawood-tv-watch-party
-        CLUSTER: metawood-tv
+        ECS_SERVICE: metawood-tv-watch-party
+        ECS_CLUSTER: metawood-tv
       with:
         task-definition: task-definition.json
-        service: $SERVICE
-        cluster: $CLUSTER
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
