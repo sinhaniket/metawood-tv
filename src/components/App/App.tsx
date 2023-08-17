@@ -1317,6 +1317,16 @@ export default class App extends React.Component<AppProps, AppState> {
       } else if (e.key === 'm') {
         this.toggleMute();
       }
+
+      if (e.key === 'k') {
+        console.log('K key pressed');
+        this.fade(false);
+        // Do something when 'K' key is pressed
+      } else if (e.key === 'q') {
+        console.log('Q key pressed');
+        this.fade(true);
+        // Do something when 'Q' key is pressed
+      }
     }
   };
 
