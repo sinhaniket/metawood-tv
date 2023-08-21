@@ -333,6 +333,10 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   }
   fade = (param: boolean) => {
+    console.log('====================================');
+    console.log('fading started: ', param);
+    console.log('====================================');
+
     if (param) {
       setTimeout(() => {
         if (this.getVolume() > 0.05) {
@@ -356,17 +360,21 @@ export default class App extends React.Component<AppProps, AppState> {
       console.log('JSON received: ' + json);
 
       if (json.type === 'mute') {
+        console.log('JSON.TYPE: ', json.type);
         this.toggleMute();
       }
       if (json.type === 'fadeIn') {
+        console.log('JSON.TYPE: ', json.type);
         this.fade(true);
       }
 
       if (json.type === 'fadeOut') {
+        console.log('JSON.TYPE: ', json.type);
         this.fade(false);
       }
 
       if (json.type === 'setVolume') {
+        console.log('JSON.TYPE: ', json.type);
         this.setVolume(json?.message ?? this.getVolume());
       }
     });
