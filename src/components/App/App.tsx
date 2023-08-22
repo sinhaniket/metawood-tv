@@ -356,7 +356,18 @@ export default class App extends React.Component<AppProps, AppState> {
   addMessageListener = () => {
     window.vuplex.addEventListener('message', (event: any) => {
       let json = event.data;
+      try {
+        json = JSON.parse(json);
+      } catch (error) {
+        console.log(
+          { error },
+          'Error parsing, type of the event data ==>',
+          typeof json
+        );
+      }
+
       // > JSON received: { "type": "greeting", "message": "Hello from C#!" }
+
       console.log('JSON received: ' + json);
 
       if (json.type === 'mute') {
