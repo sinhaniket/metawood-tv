@@ -375,7 +375,7 @@ export default class App extends React.Component<AppProps, AppState> {
         );
       }
 
-      // > JSON received: { "type": "greeting", "message": "Hello from C#!" }
+      // > JSON received: { "type": "greeting", "message": "1" }
 
       console.log('JSON received: ' + json);
 
@@ -391,6 +391,13 @@ export default class App extends React.Component<AppProps, AppState> {
       if (json.type === 'fadeOut') {
         console.log('JSON.TYPE: ', json.type);
         this.fade(false);
+      }
+
+      if (json.type === 'setMaxVolume') {
+        console.log('JSON :', json);
+        this.setMaxVolume(Number(json.message));
+
+        // this.fade(false);
       }
 
       if (json.type === 'setVolume') {
