@@ -339,20 +339,29 @@ export default class App extends React.Component<AppProps, AppState> {
 
     if (param) {
       setTimeout(() => {
-        if (this.getVolume() > 0.05) {
+        // if (this.getVolume() > 0.05) {
+        if (this.volm * 0.05 < this.getVolume()) {
           this.setVolume(this.getVolume() - 0.05);
           this.fade(true);
         }
       }, 10);
     } else {
       setTimeout(() => {
-        if (this.getVolume() < 0.8) {
+        // if (this.getVolume() < 0.8) {
+        if (this.volm > this.getVolume()) {
           this.setVolume(this.getVolume() + 0.05);
           this.fade(false);
         }
       }, 10);
     }
   };
+
+  volm = 1;
+  setMaxVolume = (volume: number) => {
+    this.volm = volume;
+    this.setVolume(volume);
+  };
+
   addMessageListener = () => {
     window.vuplex.addEventListener('message', (event: any) => {
       let json = event.data;
