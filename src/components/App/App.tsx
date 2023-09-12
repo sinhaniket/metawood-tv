@@ -345,7 +345,7 @@ export default class App extends React.Component<AppProps, AppState> {
           this.setVolume(this.getVolume() - 0.05);
           this.fade(true);
         }
-      }, 5);
+      }, 10);
     } else {
       // fade out
       setTimeout(() => {
@@ -354,7 +354,7 @@ export default class App extends React.Component<AppProps, AppState> {
           this.setVolume(this.getVolume() + 0.05);
           this.fade(false);
         }
-      }, 10);
+      }, 20);
     }
   };
   volm = 1;
