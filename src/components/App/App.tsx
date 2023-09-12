@@ -337,6 +337,7 @@ export default class App extends React.Component<AppProps, AppState> {
     console.log('fading started: ', param);
     console.log('====================================');
 
+    //fade in
     if (param) {
       setTimeout(() => {
         // if (this.getVolume() > 0.05) {
@@ -344,8 +345,9 @@ export default class App extends React.Component<AppProps, AppState> {
           this.setVolume(this.getVolume() - 0.05);
           this.fade(true);
         }
-      }, 10);
+      }, 5);
     } else {
+      // fade out
       setTimeout(() => {
         // if (this.getVolume() < 0.8) {
         if (this.volm > this.getVolume()) {
@@ -355,7 +357,6 @@ export default class App extends React.Component<AppProps, AppState> {
       }, 10);
     }
   };
-
   volm = 1;
   setMaxVolume = (volume: number) => {
     this.volm = volume;
