@@ -354,7 +354,7 @@ export default class App extends React.Component<AppProps, AppState> {
           this.setVolume(this.getVolume() + 0.05);
           this.fade(false);
         }
-      }, 20);
+      }, 50);
     }
   };
   volm = 1;
