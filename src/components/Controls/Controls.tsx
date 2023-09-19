@@ -118,7 +118,7 @@ export class Controls extends React.Component<ControlsProps> {
           'vuplexready',
           window?.vuplex.postMessage({
             type: 'playerInfo',
-            message: {
+            message: JSON.stringify({
               type: 'playerInfo',
               message: {
                 volume: this.props.volume,
@@ -127,7 +127,7 @@ export class Controls extends React.Component<ControlsProps> {
                 isMuted: this.props.muted,
                 isPaused: this.props.paused,
               },
-            },
+            }),
           })
         );
       }

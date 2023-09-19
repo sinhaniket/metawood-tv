@@ -363,6 +363,31 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setVolume(volume);
   };
 
+  sendMessageToUnity = (type: string, message: string) => {
+    try {
+      if (window?.vuplex) {
+        console.log('====================================');
+        console.log('Sending Message to Unity :', { type, message });
+        console.log('====================================');
+
+        window?.vuplex.postMessage({
+          type: type,
+          message: message,
+        });
+      } else {
+        window.addEventListener(
+          'vuplexready',
+          window?.vuplex.postMessage({
+            type: type,
+            message: message,
+          })
+        );
+      }
+    } catch (error) {
+      console.error('Something went wrong!');
+    }
+  };
+
   addMessageListener = () => {
     window.vuplex.addEventListener('message', (event: any) => {
       let json = event.data;
@@ -1254,13 +1279,15 @@ export default class App extends React.Component<AppProps, AppState> {
             // console.log('--playing yt--');
             try {
               this.watchPartyYTPlayer?.playVideo();
-              // console.log(window.YT?.PlayerState.PAUSED);
-              // this.showOverlap();
+              this.sendMessageToUnity('player', 'started');
             } catch (error) {
               console.log('error: ', error);
               this.showOverlap();
             }
           }, 700);
+        } else {
+          // for other player except YT player
+          this.sendMessageToUnity('player', 'started');
         }
       }
     );
@@ -1269,8 +1296,12 @@ export default class App extends React.Component<AppProps, AppState> {
   doPause = () => {
     this.setState({ currentMediaPaused: true }, async () => {
       console.log('player paused');
+
       if (this.isYouTube()) {
         this.watchPartyYTPlayer?.pauseVideo();
+        this.sendMessageToUnity('player', 'paused');
+      } else {
+        this.sendMessageToUnity('player', 'paused');
       }
     });
   };
@@ -1999,6 +2030,7 @@ export default class App extends React.Component<AppProps, AppState> {
                         />
                       </div>
                     </div>
+
                     {!this.state.isHideOverlap &&
                       !this.state.isCollapsed &&
                       this.state.currentMedia &&
