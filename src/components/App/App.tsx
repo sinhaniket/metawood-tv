@@ -36,11 +36,12 @@ import { PasswordModal } from '../Modal/PasswordModal';
 import firebase from 'firebase/compat/app';
 import { SubtitleModal } from '../Modal/SubtitleModal';
 import UploadFile from '../Modal/UploadFile';
-import { EmptyTheatre } from '../EmptyTheatre/EmptyTheatre';
+import { EmptyTheatre, LeftVideoRef } from '../EmptyTheatre/EmptyTheatre';
 import ReactPlayer from 'react-player/lazy';
 import './App.css';
 // import YTReactPlayer from 'react-player/youtube';
 import { YtScreen } from '../Modal/YtScreen';
+import { ScreenShareModal } from '../Modal/ScreenShareModal';
 import PlaylistPage from '../PlaylistPage/PlaylistPage';
 declare global {
   interface Window {
@@ -139,11 +140,13 @@ export interface AppState {
   isMute: boolean;
   volume: number;
   isShowTheatreTopbar: boolean;
-  screen: 'home' | 'youtube' | 'playlist';
+  screen: 'home' | 'youtube' | 'playlist' | 'shareScreen';
   isUntouched: boolean;
   lastInteraction: number;
   isHideOverlap: boolean;
   isBehind: boolean;
+  screenMediaStream: MediaStream | null;
+  displayShareScreen: boolean;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
@@ -220,11 +223,14 @@ export default class App extends React.Component<AppProps, AppState> {
     isUntouched: false,
     isHideOverlap: true,
     isBehind: false,
+    screenMediaStream: null,
+    displayShareScreen: false,
   };
   socket: Socket = null as any;
   watchPartyYTPlayer: any = null;
   ytDebounce = true;
   screenShareStream?: MediaStream;
+  localStreamToPublish?: MediaStream;
   screenHostPC: PCDict = {};
   screenSharePC?: RTCPeerConnection;
   progressUpdater?: number;
@@ -916,6 +922,7 @@ export default class App extends React.Component<AppProps, AppState> {
       this.setState({ roomLock: data });
     });
     socket.on('roster', (data: User[]) => {
+      console.log(data);
       this.setState(
         { participants: data, rosterUpdateTS: Number(new Date()) },
         () => {
@@ -970,16 +977,17 @@ export default class App extends React.Component<AppProps, AppState> {
     }, 1000);
   };
 
-  setupFileShare = async () => {
+  setupFileShare = async (useMediaSoup: boolean) => {
     const files = await openFileSelector();
     if (!files) {
       return;
     }
     const file = files[0];
-    const leftVideo = document.getElementById('leftVideo') as HTMLMediaElement;
-    leftVideo.srcObject = null;
-    leftVideo.src = URL.createObjectURL(file);
-    leftVideo.play();
+    const LeftVideo = document.getElementById('LeftVideo') as HTMLMediaElement;
+    LeftVideo.srcObject = null;
+    LeftVideo.src = URL.createObjectURL(file);
+    LeftVideo.play();
+    const leftVideo = LeftVideo;
     //@ts-ignore
     const stream = leftVideo.captureStream ? leftVideo.captureStream() : {};
     // Can render video to a canvas to resize it, reduce size
@@ -992,14 +1000,17 @@ export default class App extends React.Component<AppProps, AppState> {
       ) {
         stream.getVideoTracks()[0].onended = this.stopScreenShare;
         this.screenShareStream = stream;
-        this.socket.emit('CMD:joinScreenShare', { file: true });
+        this.socket.emit('CMD:joinScreenShare', {
+          file: true,
+          mediasoup: useMediaSoup,
+        });
         this.setState({ isScreenSharing: true, isScreenSharingFile: true });
         stream.onaddtrack = undefined;
       }
     };
   };
 
-  setupScreenShare = async () => {
+  setupScreenShare = async (useMediaSoup: boolean) => {
     if (navigator.mediaDevices.getDisplayMedia) {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         //@ts-ignore
@@ -1014,9 +1025,14 @@ export default class App extends React.Component<AppProps, AppState> {
           sampleSize: 16,
         },
       });
+      console.log(stream);
+      this.setState({ screen: 'home', isHome: true, isUploadPress: false });
       stream.getVideoTracks()[0].onended = this.stopScreenShare;
       this.screenShareStream = stream;
-      this.socket.emit('CMD:joinScreenShare');
+      this.socket.emit('CMD:joinScreenShare', {
+        file: false,
+        mediasoup: useMediaSoup,
+      });
       this.setState({ isScreenSharing: true });
     }
   };
@@ -1050,7 +1066,27 @@ export default class App extends React.Component<AppProps, AppState> {
       return;
     }
     const sharer = this.state.participants.find((p) => p.isScreenShare);
+    console.log(sharer);
     const selfId = getAndSaveClientId();
+    const localTrack = this.localStreamToPublish?.getVideoTracks()[0];
+
+    // if (this.state.roomMedia.includes('@')) {
+    //   let prefix = 'screenshare://';
+    //   // if (this.playingFileShare()) {
+    //   //   prefix = 'fileshare://';
+    //   // }
+    //   const unprefixed = this.state.roomMedia.replace(prefix, '');
+    //   const mediasoupURL = unprefixed.split('@')[1];
+    //   if (sharer?.clientId === selfId && this.mediasoupPubSocket == null) {
+    //     await this.publishMediasoup(mediasoupURL);
+    //   }
+    //   // If we're not sharing a file, also start watching
+    //   // avoid duplicate watching if the socket already exists
+    //   if (!this.isLocalStreamAFile && this.mediasoupSubSocket == null) {
+    //     await this.subscribeMediasoup(mediasoupURL);
+    //   }
+    //   return;
+    // }
     if (sharer && sharer.clientId === selfId) {
       // We're the sharer, create a connection to each other member
 
@@ -1107,18 +1143,28 @@ export default class App extends React.Component<AppProps, AppState> {
         }
       };
       pc.ontrack = (event: RTCTrackEvent) => {
-        // Mount the stream from peer
-        // console.log(stream);
-        // const leftVideo = document.getElementById(
-        //   'leftVideo'
-        // ) as HTMLMediaElement;
-        // if (leftVideo) {
-        //   leftVideo.src = '';
-        //   leftVideo.srcObject = event.streams[0];
-        //   this.doPlay();
-        // }
+        const leftVideo = document.getElementById(
+          'leftVideo'
+        ) as HTMLMediaElement;
+        console.log(
+          event.streams[0],
+          'LeftVideoRef.current.srcObject_previous'
+        );
+        if (LeftVideoRef.current) {
+          // leftVideo.src = '';
+          console.log(event.streams[0], 'LeftVideoRef.current.srcObject');
+          LeftVideoRef.current.srcObject = event.streams[0];
+          console.log(
+            LeftVideoRef.current.srcObject.getTracks(),
+            'LeftVideoRef.current.srcObject.getTracks()'
+          );
+          this.doPlay();
+        }
+
+        // this.state.screenMediaStream = event.streams[0]
       };
     }
+    console.log('updateScreenShare2');
   };
 
   startVBrowser = async (rcToken: string, options: { size: string }) => {
@@ -1674,6 +1720,15 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState({ screen: 'youtube', isHome: true, isUploadPress: false });
   };
 
+  shareScreen = () => {
+    console.log('screenShare yt: ');
+    this.setState({
+      screen: 'shareScreen',
+      isHome: true,
+      isUploadPress: false,
+    });
+  };
+
   showPlaylist = () => {
     console.log('showing playlist: ');
     this.setState({ screen: 'playlist', isHome: true, isUploadPress: false });
@@ -1785,7 +1840,14 @@ export default class App extends React.Component<AppProps, AppState> {
                 showPlaylist={this.showPlaylist}
               />
             )}
-
+            {this.state.isHome && this.state.screen === 'shareScreen' && (
+              <ScreenShareModal
+                startScreenShare={this.setupScreenShare}
+                closeModal={() =>
+                  this.setState({ isScreenShareModalOpen: false })
+                }
+              />
+            )}
             {this.state.screen === 'playlist' && this.state.isHome && (
               <PlaylistPage
                 setMedia={this.setMedia}
@@ -1860,6 +1922,7 @@ export default class App extends React.Component<AppProps, AppState> {
                                 onClick={this.stopScreenShare}
                                 disabled={sharer?.id !== this.socket?.id}
                               >
+                                Screen Share
                                 <Icon name="cancel" />
                                 Stop Share
                               </Button>
@@ -1900,6 +1963,7 @@ export default class App extends React.Component<AppProps, AppState> {
                         {this.state.isHome && this.state.screen === 'home' && (
                           <EmptyTheatre
                             gotoYTScreen={this.gotoYTScreen}
+                            shareScreen={this.shareScreen}
                             state={this.state}
                             setState={this.setState}
                             playlist={this.state.playlist}
@@ -1917,7 +1981,10 @@ export default class App extends React.Component<AppProps, AppState> {
                             disabled={!this.haveLock()}
                             toggleHome={this.toggleHome}
                             setLoadingFalse={this.setLoadingFalse}
+                            // updateScreenShare={this.updateScreenShare}
                             // isHome={this.state.isHome}
+                            // screenMediaStream={this.state.screenMediaStream}
+                            // doPlay={this.doPlay}
                           />
                         )}
                         {(this.state.loading ||

@@ -2,11 +2,13 @@
   z-index: 1200 !important;
   min-height: 80vh;
 }
+
 .UploadButton {
   background-color: #8350f1 !important;
   color: #f4f4f4 !important;
   margin: 10px 0 !important;
 }
+
 .btn_area {
   width: 100%;
   gap: 10px;
@@ -16,6 +18,7 @@
   margin-top: 10px;
   margin-right: 20px;
 }
+
 .tolbar {
   width: 95%;
   gap: 10px;
@@ -29,6 +32,7 @@
 .btnBoxShadow {
   box-shadow: 0px 1px 4px -1px rgb(182, 181, 181);
 }
+
 .content {
   /* margin-top: -80px; */
   display: flex;
@@ -45,6 +49,7 @@
   background-repeat: no-repeat;
   /* z-index: 1; */
 }
+
 .content::before {
   content: '';
   position: absolute;
@@ -64,18 +69,22 @@
   position: relative;
   color: rgba(170, 165, 165, 0.767) !important;
 }
+
 .btncontainer {
   margin: 20px 0px;
 }
+
 .inputContainer {
   margin: 5px 0px 20px 0px;
   padding: 0;
   position: relative;
   width: 100%;
 }
+
 .uploadBtnBg {
   background: linear-gradient(135deg, #08ff5c 0%, #00882e 100%);
 }
+
 .inputStyle {
   background: linear-gradient(
       0deg,
@@ -93,36 +102,44 @@
   display: flex !important;
   align-items: center !important;
 }
+
 .PlaylistDropdown > div {
   font-size: 2.6wv !important;
 }
+
 .PlaylistDropdown > i {
   background-color: #ffffff !important;
   color: #49454f !important;
 }
+
 .PlaylistMenu {
   background: black !important;
   padding: 0 !important;
   width: 100% !important;
 }
+
 .playlist_content {
   position: absolute;
   right: -13px !important;
   top: -18px !important;
 }
+
 .PlaylistMenu {
   background: black !important;
   padding: 0 !important;
   width: 100% !important;
 }
+
 .PlaylistItem {
   background: inherit;
   padding: 0px !important;
 }
+
 .scrollbarContainer {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
+
 .scrollbarContainer::-webkit-scrollbar {
   width: 6px !important;
   display: none;
@@ -154,6 +171,13 @@
   background-color: rgba(197, 197, 197, 0.3);
   display: none;
 }
+
 .boxShadowCustom {
   box-shadow: 0 0 12px -2px white;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

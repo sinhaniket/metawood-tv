@@ -26,7 +26,7 @@ export class ScreenShareModal extends React.Component<{
             </ul>
             <Button
               onClick={() => {
-                this.props.startScreenShare();
+                this.props.startScreenShare(false);
                 this.props.closeModal();
               }}
             >

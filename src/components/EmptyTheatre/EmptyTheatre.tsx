@@ -42,6 +42,9 @@ export interface IEmptyTheatreProps {
   state: AppState;
   gotoYTScreen: Function;
   showPlaylist: Function;
+  shareScreen: Function;
+  // screenMediaStream: MediaStream | null;
+  // doPlay:Function
 }
 
 export function EmptyTheatre(props: IEmptyTheatreProps) {
@@ -56,6 +59,9 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
     showPlaylist,
     setLoadingFalse,
     gotoYTScreen,
+    shareScreen,
+    // screenMediaStream,
+    // doPlay
   } = props;
   // const { opacity: op } = GetOpacity(!state.currentMediaPaused);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(true);
@@ -63,7 +69,7 @@ export function EmptyTheatre(props: IEmptyTheatreProps) {
   const [activeSlideIndex, setActiveSlideIndex] = React.useState(0);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const swiperRef = React.useRef<SwiperCore | null>(null);
-
+  // const LeftVideo = useRef<HTMLVideoElement>(null);
   // const handleNextSlide = (type: string) => {
   //   if (swiperRef.current && type === 'prev') {
   //     swiperRef.current.slidePrev();
@@ -305,22 +311,35 @@ touch listener
                 </span>{' '}
                 Now Playing
               </div>
-              <span
-                onClick={() => currentMedia && toggleHome()}
-                className="absolute left-0 top-0 h-full z-50 w-full"
-              ></span>
+
               <div className="flex justify-center items-center h-[90px] lg:h-[180px] lg:mt-6">
-                {currentMedia && !state.currentMediaPaused ? (
-                  <ReactPlayer
-                    className="z-10 rounded-xl overflow-hidden"
-                    url={currentMedia}
-                    playing={false}
-                    controls={false}
-                    muted
-                    height="100%"
-                    width="100%"
-                    light
-                  />
+                {currentMedia ? (
+                  currentMedia.startsWith('screenshare') ? (
+                    <div>
+                      <video
+                        id="leftVideo"
+                        ref={LeftVideoRef}
+                        autoPlay
+                        controls
+                      />
+                    </div>
+                  ) : (
+                    <span
+                      onClick={() => currentMedia && toggleHome()}
+                      className="absolute left-0 top-0 h-full z-50 w-full"
+                    >
+                      <ReactPlayer
+                        className="z-10 rounded-xl overflow-hidden"
+                        url={currentMedia}
+                        playing={false}
+                        controls={false}
+                        muted
+                        height="100%"
+                        width="100%"
+                        light
+                      />
+                    </span>
+                  )
                 ) : (
                   <div className="flex flex-col items-center justify-center lg:text-[1.8vw] mt-2 lg:leading-10 text-[#49454f] capitalize">
                     <img src={CoffeIcon} alt="" className="lg:h-36 mb-1" />
@@ -328,6 +347,18 @@ touch listener
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+          <div
+            className={` bg-[#89a3ae] hover:bg-[#27a2dd] ${classes.btnBoxShadow} flex justify-center w-[27%] min-w-[27%] h-[20vw] items-center rounded-xl btn border-0 capitalize`}
+          >
+            <div
+              className="flex justify-center items-center rounded-xl h-full"
+              onClick={() => shareScreen()}
+            >
+              <span className="text-white font-semibold text-[28px] lg:text-[48px]">
+                screen share
+              </span>
             </div>
           </div>
           <div
@@ -433,3 +464,4 @@ touch listener
     </main>
   );
 }
+export const LeftVideoRef = React.createRef<HTMLVideoElement>();
